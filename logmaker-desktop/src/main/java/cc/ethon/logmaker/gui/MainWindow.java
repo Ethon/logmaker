@@ -2,6 +2,7 @@ package cc.ethon.logmaker.gui;
 
 import java.io.File;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -78,10 +79,19 @@ public class MainWindow extends VBox {
 			@Override
 			public void handle(ActionEvent event) {
 				try {
+					final File exportFile = new File(model.getExportFile().get());
 					final LogReader reader = new RedyGymLogDbReader();
-					final WorkoutLog log = reader.readLog(new File(model.getExportFile().get()));
+					final WorkoutLog log = reader.readLog(exportFile);
 					final Generator gen = new DefaultGenerator();
 					gen.genLastWorkoutToClipboard(log);
+
+					if (model.getDeleteExportFile().get()) {
+						exportFile.delete();
+					}
+
+					if (model.getCloseApplication().get()) {
+						Platform.exit();
+					}
 				} catch (final Exception e) {
 					e.printStackTrace();
 					final Alert alert = new Alert(AlertType.ERROR, e.toString(), ButtonType.OK);
