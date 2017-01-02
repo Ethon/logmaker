@@ -14,7 +14,7 @@ public class Settings {
 	private static final String KEY_DELETEEXPORTFILE = "deleteExportFile";
 	private static final String KEY_EXPORTFILE = "exportFile";
 
-	private static final String SETTINGS_FILENAME = "logcreator-settings.xml";
+	private static final String SETTINGS_FILENAME = "logmaker-settings.xml";
 
 	private static Settings instance;
 
