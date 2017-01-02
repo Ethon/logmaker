@@ -3,7 +3,9 @@ package cc.ethon.logmaker.gui;
 import java.io.File;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -15,6 +17,7 @@ public class MainWindowModel {
 	private final StringProperty exportFile;
 	private final BooleanProperty deleteExportFile;
 	private final BooleanProperty closeApplication;
+	private final IntegerProperty selectedLogReader;
 
 	public MainWindowModel(Settings settings) {
 
@@ -45,6 +48,14 @@ public class MainWindowModel {
 				settings.setCloseApplication(newValue);
 			}
 		});
+
+		selectedLogReader = new SimpleIntegerProperty(settings.getSelectedLogReader());
+		selectedLogReader.addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				settings.setSelectedLogReader(newValue.intValue());
+			}
+		});
 	}
 
 	public StringProperty getExportFile() {
@@ -57,6 +68,10 @@ public class MainWindowModel {
 
 	public BooleanProperty getCloseApplication() {
 		return closeApplication;
+	}
+
+	public IntegerProperty getSelectedLogReader() {
+		return selectedLogReader;
 	}
 
 }

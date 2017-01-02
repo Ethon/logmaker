@@ -10,6 +10,7 @@ import java.util.Properties;
 
 public class Settings {
 
+	private static final String KEY_SELECTEDLOGREADER = "selectedLogReader";
 	private static final String KEY_CLOSEAPPLICATION = "closeApplication";
 	private static final String KEY_DELETEEXPORTFILE = "deleteExportFile";
 	private static final String KEY_EXPORTFILE = "exportFile";
@@ -22,6 +23,7 @@ public class Settings {
 	private File exportFile;
 	private Boolean deleteExportFile;
 	private Boolean closeApplication;
+	private Integer selectedLogReader;
 
 	private void loadFromFile() throws IOException {
 		properties = new Properties();
@@ -97,6 +99,22 @@ public class Settings {
 	public void setCloseApplication(Boolean closeApplication) {
 		this.closeApplication = closeApplication;
 		properties.setProperty(KEY_CLOSEAPPLICATION, closeApplication.toString());
+	}
+
+	public Integer getSelectedLogReader() {
+		if (selectedLogReader == null) {
+			final String value = properties.getProperty(KEY_SELECTEDLOGREADER);
+			selectedLogReader = value != null ? Integer.parseInt(value) : 0;
+			if (!properties.contains(KEY_SELECTEDLOGREADER)) {
+				properties.setProperty(KEY_SELECTEDLOGREADER, String.valueOf(selectedLogReader));
+			}
+		}
+		return selectedLogReader;
+	}
+
+	public void setSelectedLogReader(Integer selectedLogReader) {
+		this.selectedLogReader = selectedLogReader;
+		properties.setProperty(KEY_SELECTEDLOGREADER, String.valueOf(selectedLogReader));
 	}
 
 }

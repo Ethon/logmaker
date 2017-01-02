@@ -3,6 +3,7 @@ package cc.ethon.logmaker.gui;
 import java.io.File;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,6 +12,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -21,13 +23,25 @@ import javafx.stage.Stage;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.gen.DefaultGenerator;
 import cc.ethon.logmaker.gen.Generator;
+import cc.ethon.logmaker.gui.readermodel.LogReaderModel;
+import cc.ethon.logmaker.gui.readermodel.RedyGymLogCsvReaderModel;
+import cc.ethon.logmaker.gui.readermodel.RedyGymLogDbReaderModel;
 import cc.ethon.logmaker.reader.LogReader;
-import cc.ethon.logmaker.reader.redy.db.RedyGymLogDbReader;
 
 public class MainWindow extends VBox {
 
 	private final Stage stage;
 	private final MainWindowModel model;
+
+	private ComboBox<LogReaderModel> selectedLogReaderComboBox;
+
+	private void createReaderSelection() {
+		selectedLogReaderComboBox = new ComboBox<LogReaderModel>();
+		selectedLogReaderComboBox.setItems(FXCollections.observableArrayList(new RedyGymLogCsvReaderModel(), new RedyGymLogDbReaderModel()));
+		selectedLogReaderComboBox.getSelectionModel().select(model.getSelectedLogReader().get());
+		model.getSelectedLogReader().bind(selectedLogReaderComboBox.getSelectionModel().selectedIndexProperty());
+		getChildren().add(selectedLogReaderComboBox);
+	}
 
 	private void createExportFileChooserRow() {
 		final Label label = new Label("Chosen export file:");
@@ -80,7 +94,7 @@ public class MainWindow extends VBox {
 			public void handle(ActionEvent event) {
 				try {
 					final File exportFile = new File(model.getExportFile().get());
-					final LogReader reader = new RedyGymLogDbReader();
+					final LogReader reader = selectedLogReaderComboBox.getSelectionModel().getSelectedItem().createReader();
 					final WorkoutLog log = reader.readLog(exportFile);
 					final Generator gen = new DefaultGenerator();
 					gen.genLastWorkoutToClipboard(log);
@@ -106,6 +120,7 @@ public class MainWindow extends VBox {
 		this.stage = stage;
 		this.model = model;
 
+		createReaderSelection();
 		createExportFileChooserRow();
 		createOptionsRow();
 		createGenerateButton();

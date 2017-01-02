@@ -60,3 +60,4 @@ $RECYCLE.BIN/
 *.lnk
 *.classpath
 *.prefs
+logmaker-desktop/logmaker-settings.xml
