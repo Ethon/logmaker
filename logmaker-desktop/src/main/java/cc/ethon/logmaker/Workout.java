@@ -5,21 +5,22 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import cc.ethon.logmaker.formula.MaxEstimator;
 
 public class Workout {
 
+	private final Optional<String> name;
 	private final List<Set> sets;
 	private final LocalDate date;
 
-	public Workout(LocalDate date) {
-		this.date = date;
-		sets = new ArrayList<Set>();
+	public Workout(Optional<String> name, LocalDate date) {
+		this(name, date, new ArrayList<Set>());
 	}
 
-	public Workout(LocalDate date, List<Set> sets) {
-		super();
+	public Workout(Optional<String> name, LocalDate date, List<Set> sets) {
+		this.name = name;
 		this.date = date;
 		this.sets = sets;
 	}
@@ -77,4 +78,9 @@ public class Workout {
 	public double getWeightLifted() {
 		return sets.stream().mapToDouble(Set::getWeightLifted).sum();
 	}
+
+	public Optional<String> getName() {
+		return name;
+	}
+
 }

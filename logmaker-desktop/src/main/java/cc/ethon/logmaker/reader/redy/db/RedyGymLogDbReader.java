@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import cc.ethon.logmaker.Set;
@@ -44,7 +45,15 @@ public class RedyGymLogDbReader implements LogReader {
 
 					Workout wo = workouts.get(date);
 					if (wo == null) {
-						wo = new Workout(date);
+						try (WorkoutRoutineDao workoutRoutineDao = new WorkoutRoutineDao(connection)) {
+							final WorkoutRoutineDomainObject matchingWorkout = workoutRoutineDao.getWorkoutRoutineByLastTrainedDate(date);
+							if (matchingWorkout != null) {
+								wo = new Workout(Optional.of(matchingWorkout.getName()), date);
+							} else {
+								wo = new Workout(Optional.empty(), date);
+							}
+						}
+
 						workouts.put(date, wo);
 					}
 					wo.addSet(new Set(date, time, exercise, reps, weight));

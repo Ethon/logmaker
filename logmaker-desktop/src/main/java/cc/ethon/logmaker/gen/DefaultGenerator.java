@@ -30,7 +30,7 @@ public class DefaultGenerator implements Generator {
 		final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("'['H':'m']'", Locale.GERMAN);
 
 		final DecimalFormat df = new DecimalFormat("0.##");
-		out.printf("[size=150][b][u]%s - <>[/u][/b][/size]\n", wo.getDate().format(dateFormatter));
+		out.printf("[size=150][b][u]%s - %s[/u][/b][/size]\n", wo.getDate().format(dateFormatter), wo.getName().isPresent() ? wo.getName().get() : "<>");
 		if (wo.getSets().isEmpty()) {
 			out.println();
 			return;

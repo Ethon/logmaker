@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import cc.ethon.logmaker.Set;
@@ -64,7 +65,7 @@ public class RedyGymLogCsvReader implements LogReader {
 
 			Workout wo = workouts.get(date);
 			if (wo == null) {
-				wo = new Workout(date);
+				wo = new Workout(Optional.empty(), date);
 				workouts.put(date, wo);
 			}
 			wo.addSet(new Set(date, time, exercise, reps, weight));
