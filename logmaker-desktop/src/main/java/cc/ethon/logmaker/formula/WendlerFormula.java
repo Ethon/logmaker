@@ -15,4 +15,9 @@ public class WendlerFormula implements MaxEstimator {
 		return set.getWeight() * set.getReps() * 0.0333 + set.getWeight();
 	}
 
+	@Override
+	public String getName() {
+		return "Wendler";
+	}
+
 }

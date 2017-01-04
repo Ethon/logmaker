@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import cc.ethon.logmaker.Workout;
+import cc.ethon.logmaker.formula.MaxEstimator;
 
 public class WorkoutModel {
 
@@ -15,9 +16,12 @@ public class WorkoutModel {
 	private static final DecimalFormat WEIGHT_FORMATTER = new DecimalFormat("0.##");
 
 	private final Workout workout;
+	private final MaxEstimator maxEstimator;
 
-	public WorkoutModel(Workout workout) {
+	public WorkoutModel(Workout workout, MaxEstimator maxEstimator) {
+		super();
 		this.workout = workout;
+		this.maxEstimator = maxEstimator;
 	}
 
 	public String getDate() {
@@ -41,7 +45,7 @@ public class WorkoutModel {
 	}
 
 	public List<WorkoutExerciseModel> getExercises() {
-		return workout.getExercises().stream().map(exercise -> new WorkoutExerciseModel(exercise)).collect(Collectors.toList());
+		return workout.getExercises().stream().map(exercise -> new WorkoutExerciseModel(exercise, maxEstimator)).collect(Collectors.toList());
 	}
 
 }

@@ -19,7 +19,7 @@ public class Set {
 		this.time = time;
 		this.exercise = exercise;
 		this.reps = reps;
-		this.weight = weight;
+		this.weight = Math.abs(weight);
 	}
 
 	public double estimateErm(MaxEstimator estimator) {

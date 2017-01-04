@@ -18,7 +18,11 @@ public class WorkoutLogModel {
 	}
 
 	public List<WorkoutModel> getWorkouts() {
-		return log.getWorkouts().stream().map(wo -> new WorkoutModel(wo)).collect(Collectors.toList());
+		return log.getWorkouts().stream().map(wo -> new WorkoutModel(wo, maxEstimator)).collect(Collectors.toList());
+	}
+
+	public String getErmFormulaName() {
+		return maxEstimator.getName();
 	}
 
 }
