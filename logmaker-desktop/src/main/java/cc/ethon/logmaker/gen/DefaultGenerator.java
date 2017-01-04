@@ -99,17 +99,17 @@ public class DefaultGenerator implements Generator {
 	@Override
 	public void gen(PrintStream out, WorkoutLog log) {
 
-		for (final Workout wo : log.getLog()) {
+		for (final Workout wo : log.getWorkouts()) {
 			genWorkout(out, wo, log);
 		}
 	}
 
 	@Override
 	public void genLastWorkout(PrintStream out, WorkoutLog log) {
-		if (log.getLog().isEmpty()) {
+		if (log.getWorkouts().isEmpty()) {
 			return;
 		}
-		genWorkout(out, log.getLog().get(log.getLog().size() - 1), log);
+		genWorkout(out, log.getWorkouts().get(log.getWorkouts().size() - 1), log);
 	}
 
 	@Override
