@@ -92,7 +92,7 @@ public class Workout {
 	}
 
 	public int getSetCount() {
-		return exercises.size();
+		return getExercises().stream().mapToInt(ex -> ex.getSets().size()).sum();
 	}
 
 	public WorkoutExercise getExercise(Exercise exercise) {

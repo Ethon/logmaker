@@ -2,7 +2,9 @@ package cc.ethon.logmaker.gen.model;
 
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import cc.ethon.logmaker.Workout;
 
@@ -36,6 +38,10 @@ public class WorkoutModel {
 
 	public int getSetCount() {
 		return workout.getSetCount();
+	}
+
+	public List<WorkoutExerciseModel> getExercises() {
+		return workout.getExercises().stream().map(exercise -> new WorkoutExerciseModel(exercise)).collect(Collectors.toList());
 	}
 
 }

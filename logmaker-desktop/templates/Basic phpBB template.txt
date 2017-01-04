@@ -5,4 +5,12 @@
 [i]Duration:[/i] ${workout.duration}
 [i]Weight lifted:[/i] ${workout.weightLifted}kg
 [i]Sets:[/i] ${workout.setCount}
+
+<#list workout.exercises as exercise>
+[b][u]${exercise.name}:[/u][/b]
+<#list exercise.sets as set>
+[${set.time}] ${set.weight}kg x ${set.repetitions}
+</#list>
+
+</#list>
 </#list>
