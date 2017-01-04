@@ -32,11 +32,11 @@ public class WorkoutRoutineDao implements AutoCloseable {
 	}
 
 	public WorkoutRoutineDomainObject getWorkoutRoutineByLastTrainedDate(LocalDate date) throws SQLException {
-		final String dateString = String.format("%d-%2d-%2d", date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+		final String dateString = String.format("%d-%02d-%02d", date.getYear(), date.getMonthValue(), date.getDayOfMonth());
 		getWorkoutRoutineByLastTrainedDateStatement.setString(1, dateString + "%");
 		try (ResultSet rs = getWorkoutRoutineByLastTrainedDateStatement.executeQuery()) {
 			if (rs.next()) {
-				readOne(rs);
+				return readOne(rs);
 			}
 		}
 		return null;
