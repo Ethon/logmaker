@@ -9,11 +9,11 @@ public class Set {
 
 	private LocalDate date;
 	private LocalTime time;
-	private String exercise;
+	private Exercise exercise;
 	private int reps;
 	private double weight;
 
-	public Set(LocalDate date, LocalTime time, String exercise, int reps, double weight) {
+	public Set(LocalDate date, LocalTime time, Exercise exercise, int reps, double weight) {
 		super();
 		this.date = date;
 		this.time = time;
@@ -30,7 +30,7 @@ public class Set {
 		return date;
 	}
 
-	public String getExercise() {
+	public Exercise getExercise() {
 		return exercise;
 	}
 
@@ -54,7 +54,7 @@ public class Set {
 		this.date = date;
 	}
 
-	public void setExercise(String exercise) {
+	public void setExercise(Exercise exercise) {
 		this.exercise = exercise;
 	}
 

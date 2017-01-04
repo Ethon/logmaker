@@ -48,13 +48,14 @@ public class DefaultGenerator implements Generator {
 		for (final Set set : getSortedSets(wo.getSets())) {
 			if (curEx == null || !curEx.equals(set.getExercise())) {
 				out.println();
-				curEx = set.getExercise();
+				curEx = set.getExercise().getName();
 				out.printf("[b][u]%s:[/u][/b]\n", curEx);
 			}
 
 			if (set.getWeight() > 0.0) {
 				String wendlerExtraInfo = "";
-				final OptionalDouble record = log.getExerciseWendlerERMRecord(set.getExercise(), wo.getSetsByExercise(set.getExercise()), estimator);
+				final OptionalDouble record = log.getExerciseWendlerERMRecord(set.getExercise().getName(), wo.getSetsByExercise(set.getExercise().getName()),
+						estimator);
 				if (record.isPresent()) {
 					final double delta = record.getAsDouble() - set.estimateERM(estimator);
 					if (delta > 0) {
@@ -81,7 +82,7 @@ public class DefaultGenerator implements Generator {
 		int curOrder = 0;
 		for (final Set set : in) {
 			if (!exerciseOrder.containsKey(set.getExercise())) {
-				exerciseOrder.put(set.getExercise(), curOrder++);
+				exerciseOrder.put(set.getExercise().getName(), curOrder++);
 			}
 		}
 

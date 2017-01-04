@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+import cc.ethon.logmaker.Exercise;
 import cc.ethon.logmaker.Set;
 import cc.ethon.logmaker.Workout;
 import cc.ethon.logmaker.WorkoutLog;
@@ -55,7 +56,7 @@ public class RedyGymLogCsvReader implements LogReader {
 
 			final LocalDate date = LocalDate.parse(parts[0], dtf);
 			final LocalTime time = LocalTime.parse(parts[0], dtf);
-			final String exercise = parts[1];
+			final Exercise exercise = new Exercise(parts[1]);
 			final int reps = parts[2].isEmpty() ? 0 : Integer.valueOf(parts[2]);
 			final double weight = parts[3].isEmpty() ? 0.0 : nf.parse(parts[3]).doubleValue();
 			// final LocalTime exerciseTime = parts[4].isEmpty() ?
@@ -68,6 +69,7 @@ public class RedyGymLogCsvReader implements LogReader {
 				wo = new Workout(Optional.empty(), date);
 				workouts.put(date, wo);
 			}
+
 			wo.addSet(new Set(date, time, exercise, reps, weight));
 		}
 

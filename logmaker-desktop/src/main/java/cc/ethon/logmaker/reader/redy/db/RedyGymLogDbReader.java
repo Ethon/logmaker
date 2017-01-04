@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+import cc.ethon.logmaker.Exercise;
 import cc.ethon.logmaker.Set;
 import cc.ethon.logmaker.Workout;
 import cc.ethon.logmaker.WorkoutLog;
@@ -39,7 +40,7 @@ public class RedyGymLogDbReader implements LogReader {
 					final String dateString = set.getDate().split("\\.")[0];
 					final LocalDate date = LocalDate.parse(dateString, dtf);
 					final LocalTime time = LocalTime.parse(dateString, dtf);
-					final String exercise = exerciseDao.getExerciseById(set.getExerciseId()).getName();
+					final Exercise exercise = new Exercise(exerciseDao.getExerciseById(set.getExerciseId()).getName());
 					final int reps = set.getRepeats();
 					final double weight = set.getWeightGrams() * 1.0 / 1000;
 
