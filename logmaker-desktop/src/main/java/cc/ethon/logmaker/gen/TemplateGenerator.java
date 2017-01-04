@@ -91,16 +91,19 @@ public class TemplateGenerator implements Generator {
 	}
 
 	@Override
-	public void genLastWorkout(PrintStream out, WorkoutLog log) {
+	public void genLastWorkout(PrintStream out, WorkoutLog log) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
+	TemplateException {
 		if (log.getWorkouts().isEmpty()) {
 			throw new UnsupportedOperationException("Can't generate last workout when no workouts are available");
 		}
 		final WorkoutLog syntheticLog = new WorkoutLog();
 		syntheticLog.addWorkout(log.getWorkouts().get(log.getWorkouts().size() - 1));
+		gen(out, syntheticLog);
 	}
 
 	@Override
-	public void genLastWorkoutToClipboard(WorkoutLog log) {
+	public void genLastWorkoutToClipboard(WorkoutLog log) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
+			TemplateException {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final PrintStream ps = new PrintStream(baos);
 		genLastWorkout(ps, log);
