@@ -1,7 +1,6 @@
 package cc.ethon.logmaker;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.OptionalDouble;
 
@@ -24,24 +23,13 @@ public class WorkoutLog {
 		workouts.add(workout);
 	}
 
-	public OptionalDouble getExerciseWendlerERMRecord(String exercise, List<Set> except, MaxEstimator estimator) {
-		return getSetsByExercise(exercise, except).stream().mapToDouble(set -> set.estimateERM(estimator)).max();
+	public OptionalDouble getExerciseErmRecord(Exercise exercise, List<Set> except, MaxEstimator estimator) {
+		return workouts.stream().map(wo -> wo.getBestSetByExercise(exercise, estimator)).filter(set -> set != null).mapToDouble(set -> estimator.estimate(set))
+				.max();
 	}
 
 	public List<Workout> getWorkouts() {
 		return workouts;
 	}
 
-	public List<Set> getSetsByExercise(String exercise, List<Set> except) {
-		final HashSet<Set> exclude = new HashSet<Set>(except);
-		final List<Set> result = new ArrayList<Set>();
-		for (final Workout wo : workouts) {
-			for (final Set set : wo.getSets()) {
-				if (set.getExercise().equals(exercise) && !exclude.contains(set)) {
-					result.add(set);
-				}
-			}
-		}
-		return result;
-	}
 }

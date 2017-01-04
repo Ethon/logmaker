@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -74,11 +73,7 @@ public class RedyGymLogCsvReader implements LogReader {
 		}
 
 		final List<Workout> woList = new ArrayList<Workout>(workouts.values());
-		for (final Workout workout : woList) {
-			Collections.reverse(workout.getSets());
-		}
 		return new WorkoutLog(woList);
-
 	}
 
 	private String[] processLine(String line, String separator) throws ParseException {

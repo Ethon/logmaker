@@ -4,7 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import cc.ethon.logmaker.formula.MaxEstimator;
@@ -12,33 +15,64 @@ import cc.ethon.logmaker.formula.MaxEstimator;
 public class Workout {
 
 	private final Optional<String> name;
-	private final List<Set> sets;
+	private final Map<Exercise, WorkoutExercise> exercises;
 	private final LocalDate date;
 
-	public Workout(Optional<String> name, LocalDate date) {
-		this(name, date, new ArrayList<Set>());
+	// Cache these to avoid excessive computing at every access.
+	private boolean changed;
+	private List<WorkoutExercise> sortedExercises;
+
+	private List<WorkoutExercise> sortExercises() {
+		final List<WorkoutExercise> result = new ArrayList<WorkoutExercise>(exercises.values());
+
+		// First sort exercises by their first set.
+		Collections.sort(result, (ex1, ex2) -> ex1.getTemporallyFirstSet().getTime().compareTo(ex2.getTemporallyFirstSet().getTime()));
+
+		// Then sort the sets of all exercises.
+		result.stream().forEach(ex -> ex.sortSets());
+
+		return result;
 	}
 
-	public Workout(Optional<String> name, LocalDate date, List<Set> sets) {
+	public Workout(Optional<String> name, LocalDate date) {
+		this(name, date, new HashMap<Exercise, WorkoutExercise>());
+	}
+
+	public Workout(Optional<String> name, LocalDate date, Map<Exercise, WorkoutExercise> exercises) {
 		this.name = name;
 		this.date = date;
-		this.sets = sets;
+		this.exercises = exercises;
 	}
 
 	public void addSet(Set set) {
-		sets.add(set);
+		if (!exercises.containsKey(set.getExercise())) {
+			exercises.put(set.getExercise(), new WorkoutExercise(set.getExercise()));
+		}
+		exercises.get(set.getExercise()).addSet(set);
+		changed = true;
 	}
 
-	public Set getBestSetByExercise(String exercise, MaxEstimator estimator) {
-		Set best = null;
-		double weight = Double.MIN_VALUE;
-		for (final Set set : sets) {
-			if (set.getExercise().equals(exercise) && set.estimateERM(estimator) > weight) {
-				best = set;
-				weight = set.estimateERM(estimator);
-			}
+	public List<WorkoutExercise> getExercises() {
+		if (sortedExercises == null || changed == true) {
+			sortedExercises = sortExercises();
+			changed = false;
 		}
-		return best;
+		return sortedExercises;
+	}
+
+	public WorkoutExercise getFirstExercise() {
+		return getExercises().isEmpty() ? null : getExercises().get(0);
+	}
+
+	public WorkoutExercise getLastExercise() {
+		return getExercises().isEmpty() ? null : getExercises().get(getExercises().size() - 1);
+	}
+
+	public Set getBestSetByExercise(Exercise exercise, MaxEstimator estimator) {
+		if (!exercises.containsKey(exercise)) {
+			return null;
+		}
+		return exercises.get(exercise).getBestSet(estimator);
 	}
 
 	public LocalDate getDate() {
@@ -46,11 +80,11 @@ public class Workout {
 	}
 
 	public LocalTime getDuration() {
-		if (sets.isEmpty()) {
+		if (getExercises().isEmpty()) {
 			return LocalTime.of(0, 0);
 		}
-		final LocalTime first = sets.get(0).getTime();
-		final LocalTime last = sets.get(sets.size() - 1).getTime();
+		final LocalTime first = getFirstExercise().getTemporallyFirstSet().getTime();
+		final LocalTime last = getLastExercise().getTemporallyLastSet().getTime();
 		int min = (int) first.until(last, ChronoUnit.MINUTES);
 		final int hours = min / 60;
 		min %= 60;
@@ -58,25 +92,15 @@ public class Workout {
 	}
 
 	public int getSetCount() {
-		return sets.size();
+		return exercises.size();
 	}
 
-	public List<Set> getSets() {
-		return sets;
-	}
-
-	public List<Set> getSetsByExercise(String exercise) {
-		final List<Set> result = new ArrayList<Set>();
-		for (final Set set : sets) {
-			if (set.getExercise().equals(exercise)) {
-				result.add(set);
-			}
-		}
-		return result;
+	public WorkoutExercise getExercise(Exercise exercise) {
+		return exercises.get(exercise);
 	}
 
 	public double getWeightLifted() {
-		return sets.stream().mapToDouble(Set::getWeightLifted).sum();
+		return exercises.values().stream().mapToDouble(exercise -> exercise.getWeightLifted()).sum();
 	}
 
 	public Optional<String> getName() {
