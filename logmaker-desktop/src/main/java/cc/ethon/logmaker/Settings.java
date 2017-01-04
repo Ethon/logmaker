@@ -15,6 +15,7 @@ public class Settings {
 	private static final String KEY_DELETEEXPORTFILE = "deleteExportFile";
 	private static final String KEY_EXPORTFILE = "exportFile";
 
+	private static final String TEMPLATES_DEFAULT_DIRECTORY = "templates/";
 	private static final String SETTINGS_FILENAME = "logmaker-settings.xml";
 
 	private static Settings instance;
@@ -115,6 +116,10 @@ public class Settings {
 	public void setSelectedLogReader(Integer selectedLogReader) {
 		this.selectedLogReader = selectedLogReader;
 		properties.setProperty(KEY_SELECTEDLOGREADER, String.valueOf(selectedLogReader));
+	}
+
+	public File getTemplatesDir() {
+		return new File(TEMPLATES_DEFAULT_DIRECTORY);
 	}
 
 }

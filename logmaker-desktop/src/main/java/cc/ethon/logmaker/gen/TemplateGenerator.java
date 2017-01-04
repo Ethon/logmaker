@@ -74,6 +74,10 @@ public class TemplateGenerator implements Generator {
 		}
 	}
 
+	public List<String> getAvailableTemplates() {
+		return availableTemplates;
+	}
+
 	public void selectTemplate(String name) {
 		if (!availableTemplates.contains(name)) {
 			throw new IllegalArgumentException("Template " + name + " does not exist");

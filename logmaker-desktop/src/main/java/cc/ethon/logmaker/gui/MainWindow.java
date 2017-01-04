@@ -1,6 +1,7 @@
 package cc.ethon.logmaker.gui;
 
 import java.io.File;
+import java.io.IOException;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -22,8 +23,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.WendlerFormula;
-import cc.ethon.logmaker.gen.DefaultGenerator;
-import cc.ethon.logmaker.gen.Generator;
 import cc.ethon.logmaker.gui.readermodel.LogReaderModel;
 import cc.ethon.logmaker.gui.readermodel.RedyGymLogCsvReaderModel;
 import cc.ethon.logmaker.gui.readermodel.RedyGymLogDbReaderModel;
@@ -35,6 +34,7 @@ public class MainWindow extends VBox {
 	private final MainWindowModel model;
 
 	private ComboBox<LogReaderModel> selectedLogReaderComboBox;
+	private ComboBox<String> selectedTemplateComboBox;
 
 	private void createReaderSelection() {
 		selectedLogReaderComboBox = new ComboBox<LogReaderModel>();
@@ -88,6 +88,12 @@ public class MainWindow extends VBox {
 		getChildren().add(hbox);
 	}
 
+	private void createTemplateFileSelection() throws IOException {
+		selectedTemplateComboBox = new ComboBox<String>();
+		selectedTemplateComboBox.setItems(FXCollections.observableArrayList(model.getGenerator().getAvailableTemplates()));
+		getChildren().add(selectedTemplateComboBox);
+	}
+
 	private void createGenerateButton() {
 		final Button generate = new Button("Generate and copy last workout to clipboard");
 		generate.setOnAction(new EventHandler<ActionEvent>() {
@@ -97,8 +103,8 @@ public class MainWindow extends VBox {
 					final File exportFile = new File(model.getExportFile().get());
 					final LogReader reader = selectedLogReaderComboBox.getSelectionModel().getSelectedItem().createReader();
 					final WorkoutLog log = reader.readLog(exportFile);
-					final Generator gen = new DefaultGenerator();
-					gen.genLastWorkoutToClipboard(log, new WendlerFormula());
+					model.getGenerator().selectTemplate(selectedTemplateComboBox.getSelectionModel().getSelectedItem());
+					model.getGenerator().genLastWorkoutToClipboard(log, new WendlerFormula());
 
 					if (model.getDeleteExportFile().get()) {
 						exportFile.delete();
@@ -117,13 +123,14 @@ public class MainWindow extends VBox {
 		getChildren().add(generate);
 	}
 
-	public MainWindow(Stage stage, MainWindowModel model) {
+	public MainWindow(Stage stage, MainWindowModel model) throws Exception {
 		this.stage = stage;
 		this.model = model;
 
 		createReaderSelection();
 		createExportFileChooserRow();
 		createOptionsRow();
+		createTemplateFileSelection();
 		createGenerateButton();
 	}
 

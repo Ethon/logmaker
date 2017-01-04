@@ -11,6 +11,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import cc.ethon.logmaker.Settings;
+import cc.ethon.logmaker.gen.TemplateGenerator;
 
 public class MainWindowModel {
 
@@ -18,8 +19,9 @@ public class MainWindowModel {
 	private final BooleanProperty deleteExportFile;
 	private final BooleanProperty closeApplication;
 	private final IntegerProperty selectedLogReader;
+	private final TemplateGenerator generator;
 
-	public MainWindowModel(Settings settings) {
+	public MainWindowModel(Settings settings) throws Exception {
 
 		exportFile = new SimpleStringProperty();
 		if (settings.getExportFile() != null) {
@@ -56,6 +58,8 @@ public class MainWindowModel {
 				settings.setSelectedLogReader(newValue.intValue());
 			}
 		});
+
+		generator = new TemplateGenerator(settings.getTemplatesDir());
 	}
 
 	public StringProperty getExportFile() {
@@ -72,6 +76,10 @@ public class MainWindowModel {
 
 	public IntegerProperty getSelectedLogReader() {
 		return selectedLogReader;
+	}
+
+	public TemplateGenerator getGenerator() {
+		return generator;
 	}
 
 }
