@@ -10,6 +10,7 @@ import java.util.Properties;
 
 public class Settings {
 
+	private static final String KEY_SELECTEDTEMPLATE = "selectedTemplate";
 	private static final String KEY_SELECTEDLOGREADER = "selectedLogReader";
 	private static final String KEY_CLOSEAPPLICATION = "closeApplication";
 	private static final String KEY_DELETEEXPORTFILE = "deleteExportFile";
@@ -25,6 +26,7 @@ public class Settings {
 	private Boolean deleteExportFile;
 	private Boolean closeApplication;
 	private Integer selectedLogReader;
+	private String selectedTemplate;
 
 	private void loadFromFile() throws IOException {
 		properties = new Properties();
@@ -120,6 +122,18 @@ public class Settings {
 
 	public File getTemplatesDir() {
 		return new File(TEMPLATES_DEFAULT_DIRECTORY);
+	}
+
+	public String getSelectedTemplate() {
+		if (selectedTemplate == null) {
+			selectedTemplate = properties.getProperty(KEY_SELECTEDTEMPLATE);
+		}
+		return selectedTemplate;
+	}
+
+	public void setSelectedTemplate(String selectedTemplate) {
+		this.selectedTemplate = selectedTemplate;
+		properties.setProperty(KEY_SELECTEDTEMPLATE, selectedTemplate);
 	}
 
 }

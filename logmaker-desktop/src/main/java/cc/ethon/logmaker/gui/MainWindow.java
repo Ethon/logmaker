@@ -2,6 +2,7 @@ package cc.ethon.logmaker.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -89,8 +90,19 @@ public class MainWindow extends VBox {
 	}
 
 	private void createTemplateFileSelection() throws IOException {
+		final List<String> availableTemplates = model.getGenerator().getAvailableTemplates();
+		final String previouslySelectedTemplate = model.getSelectedTemplate().get();
+
 		selectedTemplateComboBox = new ComboBox<String>();
-		selectedTemplateComboBox.setItems(FXCollections.observableArrayList(model.getGenerator().getAvailableTemplates()));
+		selectedTemplateComboBox.setItems(FXCollections.observableArrayList(availableTemplates));
+
+		if (previouslySelectedTemplate != null && availableTemplates.contains(previouslySelectedTemplate)) {
+			selectedTemplateComboBox.getSelectionModel().select(previouslySelectedTemplate);
+		} else if (!availableTemplates.isEmpty()) {
+			selectedTemplateComboBox.getSelectionModel().select(0);
+		}
+
+		model.getSelectedTemplate().bind(selectedTemplateComboBox.getSelectionModel().selectedItemProperty());
 		getChildren().add(selectedTemplateComboBox);
 	}
 

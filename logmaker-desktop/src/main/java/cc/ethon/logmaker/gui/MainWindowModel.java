@@ -20,6 +20,7 @@ public class MainWindowModel {
 	private final BooleanProperty closeApplication;
 	private final IntegerProperty selectedLogReader;
 	private final TemplateGenerator generator;
+	private final StringProperty selectedTemplate;
 
 	public MainWindowModel(Settings settings) throws Exception {
 
@@ -60,6 +61,12 @@ public class MainWindowModel {
 		});
 
 		generator = new TemplateGenerator(settings.getTemplatesDir());
+
+		selectedTemplate = new SimpleStringProperty();
+		if (settings.getSelectedTemplate() != null) {
+			selectedTemplate.setValue(settings.getSelectedTemplate());
+		}
+		selectedTemplate.addListener((obs, old, new_) -> settings.setSelectedTemplate(new_));
 	}
 
 	public StringProperty getExportFile() {
@@ -80,6 +87,10 @@ public class MainWindowModel {
 
 	public TemplateGenerator getGenerator() {
 		return generator;
+	}
+
+	public StringProperty getSelectedTemplate() {
+		return selectedTemplate;
 	}
 
 }
