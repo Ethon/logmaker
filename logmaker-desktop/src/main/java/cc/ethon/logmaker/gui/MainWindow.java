@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import cc.ethon.logmaker.WorkoutLog;
+import cc.ethon.logmaker.formula.WendlerFormula;
 import cc.ethon.logmaker.gen.DefaultGenerator;
 import cc.ethon.logmaker.gen.Generator;
 import cc.ethon.logmaker.gui.readermodel.LogReaderModel;
@@ -97,7 +98,7 @@ public class MainWindow extends VBox {
 					final LogReader reader = selectedLogReaderComboBox.getSelectionModel().getSelectedItem().createReader();
 					final WorkoutLog log = reader.readLog(exportFile);
 					final Generator gen = new DefaultGenerator();
-					gen.genLastWorkoutToClipboard(log);
+					gen.genLastWorkoutToClipboard(log, new WendlerFormula());
 
 					if (model.getDeleteExportFile().get()) {
 						exportFile.delete();

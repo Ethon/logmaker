@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.ethon.logmaker.WorkoutLog;
+import cc.ethon.logmaker.formula.MaxEstimator;
 import cc.ethon.logmaker.gen.model.WorkoutLogModel;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -81,26 +82,26 @@ public class TemplateGenerator implements Generator {
 	}
 
 	@Override
-	public void gen(PrintStream out, WorkoutLog log) throws Exception {
+	public void gen(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) throws Exception {
 		final Template template = configuration.getTemplate(selectedTemplate);
-		template.process(new WorkoutLogModel(log), new PrintWriter(out));
+		template.process(new WorkoutLogModel(log, maxEstimator), new PrintWriter(out));
 	}
 
 	@Override
-	public void genLastWorkout(PrintStream out, WorkoutLog log) throws Exception {
+	public void genLastWorkout(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) throws Exception {
 		if (log.getWorkouts().isEmpty()) {
 			throw new UnsupportedOperationException("Can't generate last workout when no workouts are available");
 		}
 		final WorkoutLog syntheticLog = new WorkoutLog();
 		syntheticLog.addWorkout(log.getWorkouts().get(log.getWorkouts().size() - 1));
-		gen(out, syntheticLog);
+		gen(out, syntheticLog, maxEstimator);
 	}
 
 	@Override
-	public void genLastWorkoutToClipboard(WorkoutLog log) throws Exception {
+	public void genLastWorkoutToClipboard(WorkoutLog log, MaxEstimator maxEstimator) throws Exception {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final PrintStream ps = new PrintStream(baos);
-		genLastWorkout(ps, log);
+		genLastWorkout(ps, log, maxEstimator);
 
 		final Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
 		final StringSelection data = new StringSelection(baos.toString());

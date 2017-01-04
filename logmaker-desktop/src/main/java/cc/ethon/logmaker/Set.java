@@ -22,7 +22,7 @@ public class Set {
 		this.weight = weight;
 	}
 
-	public double estimateERM(MaxEstimator estimator) {
+	public double estimateErm(MaxEstimator estimator) {
 		return estimator.estimate(this);
 	}
 

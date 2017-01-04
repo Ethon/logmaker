@@ -15,11 +15,10 @@ import cc.ethon.logmaker.Workout;
 import cc.ethon.logmaker.WorkoutExercise;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.MaxEstimator;
-import cc.ethon.logmaker.formula.WendlerFormula;
 
 public class DefaultGenerator implements Generator {
 
-	private static void genWorkout(PrintStream out, Workout wo, WorkoutLog log) {
+	private static void genWorkout(PrintStream out, Workout wo, WorkoutLog log, MaxEstimator maxEstimator) {
 		final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E, d.L.u", Locale.GERMAN);
 		final DateTimeFormatter durationFormatter = DateTimeFormatter.ofPattern("H'h' m'min'", Locale.GERMAN);
 		final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("'['H':'m']'", Locale.GERMAN);
@@ -38,17 +37,15 @@ public class DefaultGenerator implements Generator {
 		out.printf("[i]Sets:[/i] %d\n", wo.getSetCount());
 		out.println();
 
-		final MaxEstimator estimator = new WendlerFormula();
-
 		for (final WorkoutExercise exercise : wo.getExercises()) {
 			out.printf("[b][u]%s:[/u][/b]\n", exercise.getExercise().getName());
 
 			for (final Set set : exercise.getSets()) {
 				if (set.getWeight() > 0.0) {
 					String wendlerExtraInfo = "";
-					final OptionalDouble record = log.getExerciseErmRecord(set.getExercise(), wo.getExercise(set.getExercise()).getSets(), estimator);
+					final OptionalDouble record = log.getExerciseErmRecord(set.getExercise(), wo.getExercise(set.getExercise()).getSets(), maxEstimator);
 					if (record.isPresent()) {
-						final double delta = record.getAsDouble() - set.estimateERM(estimator);
+						final double delta = record.getAsDouble() - set.estimateErm(maxEstimator);
 						if (delta > 0) {
 							wendlerExtraInfo = String.format(" -> %3skg below record @ %3skg", df.format(delta), df.format(record.getAsDouble()));
 						} else if (delta == 0.0) {
@@ -60,7 +57,7 @@ public class DefaultGenerator implements Generator {
 					}
 
 					out.printf("%7s %3skg x %2d (Wendler ERM: %3skg%s)\n", set.getTime().format(timeFormatter), df.format(set.getWeight()), set.getReps(),
-							df.format(set.estimateERM(estimator)), wendlerExtraInfo);
+							df.format(set.estimateErm(maxEstimator)), wendlerExtraInfo);
 				} else {
 					out.printf("%7s %3skg x %2d\n", set.getTime().format(timeFormatter), df.format(Math.abs(set.getWeight())), set.getReps());
 				}
@@ -70,26 +67,26 @@ public class DefaultGenerator implements Generator {
 	}
 
 	@Override
-	public void gen(PrintStream out, WorkoutLog log) {
+	public void gen(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) {
 
 		for (final Workout wo : log.getWorkouts()) {
-			genWorkout(out, wo, log);
+			genWorkout(out, wo, log, maxEstimator);
 		}
 	}
 
 	@Override
-	public void genLastWorkout(PrintStream out, WorkoutLog log) {
+	public void genLastWorkout(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) {
 		if (log.getWorkouts().isEmpty()) {
 			return;
 		}
-		genWorkout(out, log.getWorkouts().get(log.getWorkouts().size() - 1), log);
+		genWorkout(out, log.getWorkouts().get(log.getWorkouts().size() - 1), log, maxEstimator);
 	}
 
 	@Override
-	public void genLastWorkoutToClipboard(WorkoutLog log) {
+	public void genLastWorkoutToClipboard(WorkoutLog log, MaxEstimator maxEstimator) {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final PrintStream ps = new PrintStream(baos);
-		genLastWorkout(ps, log);
+		genLastWorkout(ps, log, maxEstimator);
 
 		final Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
 		final StringSelection data = new StringSelection(baos.toString());
