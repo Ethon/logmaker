@@ -6,9 +6,9 @@ import cc.ethon.logmaker.WorkoutLog;
 
 public interface Generator {
 
-	public void gen(PrintStream out, WorkoutLog log);
+	public void gen(PrintStream out, WorkoutLog log) throws Exception;
 
-	public void genLastWorkout(PrintStream out, WorkoutLog log);
+	public void genLastWorkout(PrintStream out, WorkoutLog log) throws Exception;
 
-	public void genLastWorkoutToClipboard(WorkoutLog log);
+	public void genLastWorkoutToClipboard(WorkoutLog log) throws Exception;
 }
