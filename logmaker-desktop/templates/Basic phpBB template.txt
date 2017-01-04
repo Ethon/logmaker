@@ -1,0 +1,3 @@
+<#list workouts as workout>
+[size=150][b][u]${workout.date} - ${workout.name!"<>"}[/u][/b][/size]
+</#list>

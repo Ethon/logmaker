@@ -12,13 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.ethon.logmaker.WorkoutLog;
-import freemarker.core.ParseException;
+import cc.ethon.logmaker.gen.model.WorkoutLogModel;
 import freemarker.template.Configuration;
-import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.TemplateNotFoundException;
 
 public class TemplateGenerator implements Generator {
 
@@ -84,15 +81,13 @@ public class TemplateGenerator implements Generator {
 	}
 
 	@Override
-	public void gen(PrintStream out, WorkoutLog log) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
-			TemplateException {
+	public void gen(PrintStream out, WorkoutLog log) throws Exception {
 		final Template template = configuration.getTemplate(selectedTemplate);
-		template.process(log, new PrintWriter(out));
+		template.process(new WorkoutLogModel(log), new PrintWriter(out));
 	}
 
 	@Override
-	public void genLastWorkout(PrintStream out, WorkoutLog log) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
-	TemplateException {
+	public void genLastWorkout(PrintStream out, WorkoutLog log) throws Exception {
 		if (log.getWorkouts().isEmpty()) {
 			throw new UnsupportedOperationException("Can't generate last workout when no workouts are available");
 		}
@@ -102,8 +97,7 @@ public class TemplateGenerator implements Generator {
 	}
 
 	@Override
-	public void genLastWorkoutToClipboard(WorkoutLog log) throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
-			TemplateException {
+	public void genLastWorkoutToClipboard(WorkoutLog log) throws Exception {
 		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		final PrintStream ps = new PrintStream(baos);
 		genLastWorkout(ps, log);
