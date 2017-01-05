@@ -8,4 +8,8 @@ public interface MaxEstimator {
 
 	public double estimate(Set set);
 
+	default int compareSets(Set set1, Set set2) {
+		return new Double(estimate(set1)).compareTo(estimate(set2));
+	}
+
 }

@@ -1,6 +1,7 @@
 package cc.ethon.logmaker.gui;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -20,8 +21,8 @@ public class GuiApplication extends Application {
 		} catch (final Exception e) {
 			e.printStackTrace();
 			final Alert alert = new Alert(AlertType.ERROR, e.toString(), ButtonType.OK);
-			alert.show();
-			// Platform.exit();
+			alert.showAndWait();
+			Platform.exit();
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import cc.ethon.logmaker.Set;
 import cc.ethon.logmaker.Workout;
 import cc.ethon.logmaker.formula.MaxEstimator;
 
@@ -17,11 +18,13 @@ public class WorkoutModel {
 
 	private final Workout workout;
 	private final MaxEstimator maxEstimator;
+	private final WorkoutLogModel workoutLog;
 
-	public WorkoutModel(Workout workout, MaxEstimator maxEstimator) {
+	public WorkoutModel(Workout workout, MaxEstimator maxEstimator, WorkoutLogModel workoutLog) {
 		super();
 		this.workout = workout;
 		this.maxEstimator = maxEstimator;
+		this.workoutLog = workoutLog;
 	}
 
 	public String getDate() {
@@ -45,7 +48,11 @@ public class WorkoutModel {
 	}
 
 	public List<WorkoutExerciseModel> getExercises() {
-		return workout.getExercises().stream().map(exercise -> new WorkoutExerciseModel(exercise, maxEstimator)).collect(Collectors.toList());
+		return workout.getExercises().stream().map(exercise -> new WorkoutExerciseModel(exercise, maxEstimator, this)).collect(Collectors.toList());
+	}
+
+	public boolean isErmRecord(Set set, List<Set> except) {
+		return workoutLog.isErmRecord(set, except);
 	}
 
 }

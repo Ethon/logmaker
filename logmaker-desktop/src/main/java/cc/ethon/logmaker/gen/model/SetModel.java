@@ -11,11 +11,13 @@ public class SetModel {
 
 	private final Set set;
 	private final MaxEstimator maxEstimator;
+	private final WorkoutExerciseModel workoutExercise;
 
-	public SetModel(Set set, MaxEstimator maxEstimator) {
+	public SetModel(Set set, MaxEstimator maxEstimator, WorkoutExerciseModel workoutExercise) {
 		super();
 		this.set = set;
 		this.maxEstimator = maxEstimator;
+		this.workoutExercise = workoutExercise;
 	}
 
 	public String getTime() {
@@ -36,6 +38,10 @@ public class SetModel {
 
 	public boolean isNoWeight() {
 		return set.getWeight() == 0.0;
+	}
+
+	public boolean isErmRecord() {
+		return workoutExercise.isErmRecord(set);
 	}
 
 }

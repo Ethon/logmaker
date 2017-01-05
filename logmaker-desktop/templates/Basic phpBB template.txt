@@ -10,7 +10,7 @@
 [b][u]${exercise.name}:[/u][/b]
 		<#list exercise.sets as set>
 			<#if !set.noWeight>
-[${set.time}] ${set.weight}kg x ${set.repetitions} (${ermFormulaName} ERM: ${set.erm}kg)
+[${set.time}] ${set.weight}kg x ${set.repetitions} (${ermFormulaName} ERM: <#if set.ermRecord>[color=#008000]${set.erm}kg[/color]<#else>${set.erm}kg</#if>)
 			<#else>
 [${set.time}] ${set.repetitions}*
 			</#if>
