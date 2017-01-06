@@ -16,6 +16,10 @@ import cc.ethon.logmaker.WorkoutExercise;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.MaxEstimator;
 
+@Deprecated
+// Deprecated 2017-01-06
+// Deprecated DefaultGenerator as the TemplateGenerator already has more
+// features and is the better choice for future development
 public class DefaultGenerator implements Generator {
 
 	private static void genWorkout(PrintStream out, Workout wo, WorkoutLog log, MaxEstimator maxEstimator) {
