@@ -107,4 +107,9 @@ public class Workout {
 		return name;
 	}
 
+	@Override
+	public String toString() {
+		return "Workout [name=" + name + ", exercises=" + exercises + ", date=" + date + "]";
+	}
+
 }

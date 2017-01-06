@@ -43,4 +43,9 @@ public class Exercise {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Exercise [name=" + name + "]";
+	}
+
 }

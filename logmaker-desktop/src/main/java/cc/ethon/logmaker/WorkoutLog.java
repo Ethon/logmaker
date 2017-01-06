@@ -40,4 +40,9 @@ public class WorkoutLog {
 		return workouts;
 	}
 
+	@Override
+	public String toString() {
+		return "WorkoutLog [workouts=" + workouts + "]";
+	}
+
 }

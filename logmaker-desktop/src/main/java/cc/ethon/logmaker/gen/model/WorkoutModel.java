@@ -55,4 +55,9 @@ public class WorkoutModel {
 		return workoutLog.isErmRecord(set, except);
 	}
 
+	@Override
+	public String toString() {
+		return "WorkoutModel [workout=" + workout + "]";
+	}
+
 }

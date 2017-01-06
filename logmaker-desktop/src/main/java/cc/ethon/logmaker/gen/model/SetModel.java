@@ -44,4 +44,9 @@ public class SetModel {
 		return workoutExercise.isErmRecord(set);
 	}
 
+	@Override
+	public String toString() {
+		return "SetModel [set=" + set + "]";
+	}
+
 }

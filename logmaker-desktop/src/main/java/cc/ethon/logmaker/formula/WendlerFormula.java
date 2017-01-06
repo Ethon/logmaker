@@ -20,4 +20,9 @@ public class WendlerFormula implements MaxEstimator {
 		return "Wendler";
 	}
 
+	@Override
+	public String toString() {
+		return WendlerFormula.class.getSimpleName();
+	}
+
 }

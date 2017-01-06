@@ -32,4 +32,9 @@ public class WorkoutExerciseModel {
 		return workout.isErmRecord(set, exercise.getSets());
 	}
 
+	@Override
+	public String toString() {
+		return "WorkoutExerciseModel [exercise=" + exercise + "]";
+	}
+
 }

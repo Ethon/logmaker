@@ -35,4 +35,9 @@ public class WorkoutLogModel {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return "WorkoutLogModel [log=" + log + "]";
+	}
+
 }

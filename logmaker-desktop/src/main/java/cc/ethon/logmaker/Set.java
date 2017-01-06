@@ -69,4 +69,10 @@ public class Set {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+
+	@Override
+	public String toString() {
+		return "Set [date=" + date + ", time=" + time + ", exercise=" + exercise + ", reps=" + reps + ", weight=" + weight + "]";
+	}
+
 }

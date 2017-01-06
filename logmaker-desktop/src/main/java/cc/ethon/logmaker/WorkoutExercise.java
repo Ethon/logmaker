@@ -53,4 +53,9 @@ public class WorkoutExercise {
 		Collections.sort(sets, (s1, s2) -> s1.getTime().compareTo(s2.getTime()));
 	}
 
+	@Override
+	public String toString() {
+		return "WorkoutExercise [exercise=" + exercise + ", sets=" + sets + "]";
+	}
+
 }
