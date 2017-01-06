@@ -51,7 +51,7 @@ public class SetModel {
 		if (type != ExerciseType.WeightReps && type != ExerciseType.WeightTime) {
 			return true;
 		}
-		return set.getWeight() <= 0.1;
+		return set.getWeight() == 0.0;
 	}
 
 	public boolean isErmRecord() {
