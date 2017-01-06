@@ -80,9 +80,11 @@ public class RedyGymLogCsvReader implements LogReader {
 			int timeDone = 0;
 			if (hasTimeDone) {
 				final String[] timeParts = parts[4].split(":");
-				final int minutes = Integer.valueOf(timeParts[0]);
-				final int seconds = Integer.valueOf(timeParts[1]);
-				timeDone = minutes * 60 + seconds;
+				int i = 0;
+				final int hours = timeParts.length == 3 ? Integer.valueOf(timeParts[i++]) : 0;
+				final int minutes = Integer.valueOf(timeParts[i++]);
+				final int seconds = Integer.valueOf(timeParts[i]);
+				timeDone = hours * 3600 + minutes * 60 + seconds;
 			}
 
 			final Exercise exercise = new Exercise(parts[1], determineExerciseType(hasReps, hasWeight, hasTimeDone));
