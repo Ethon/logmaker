@@ -3,6 +3,7 @@ package cc.ethon.logmaker.gen.model;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import cc.ethon.logmaker.Exercise.ExerciseType;
 import cc.ethon.logmaker.Set;
 import cc.ethon.logmaker.WorkoutExercise;
 import cc.ethon.logmaker.formula.MaxEstimator;
@@ -30,6 +31,18 @@ public class WorkoutExerciseModel {
 
 	public boolean isErmRecord(Set set) {
 		return workout.isErmRecord(set, exercise.getSets());
+	}
+
+	public boolean isTimeOnly() {
+		return exercise.getExercise().getType() == ExerciseType.Time;
+	}
+
+	public boolean isRepsOnly() {
+		return exercise.getExercise().getType() == ExerciseType.Reps;
+	}
+
+	public boolean isWeightForReps() {
+		return exercise.getExercise().getType() == ExerciseType.WeightReps;
 	}
 
 	@Override

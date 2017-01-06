@@ -2,6 +2,7 @@ package cc.ethon.logmaker.gen.model;
 
 import java.text.DecimalFormat;
 
+import cc.ethon.logmaker.Exercise.ExerciseType;
 import cc.ethon.logmaker.Set;
 import cc.ethon.logmaker.formula.MaxEstimator;
 
@@ -32,12 +33,25 @@ public class SetModel {
 		return set.getReps();
 	}
 
+	public String getTimeDone() {
+		int seconds = set.getTimeDone();
+		final int hours = seconds / 3600;
+		seconds -= hours * 3600;
+		final int minutes = seconds / 60;
+		seconds -= minutes * 60;
+		return String.format("%dh %dmin %ds", hours, minutes, seconds);
+	}
+
 	public String getErm() {
 		return WEIGHT_FORMATTER.format(maxEstimator.estimate(set));
 	}
 
 	public boolean isNoWeight() {
-		return set.getWeight() == 0.0;
+		final ExerciseType type = set.getExercise().getType();
+		if (type != ExerciseType.WeightReps && type != ExerciseType.WeightTime) {
+			return true;
+		}
+		return set.getWeight() <= 0.1;
 	}
 
 	public boolean isErmRecord() {

@@ -12,14 +12,16 @@ public class Set {
 	private Exercise exercise;
 	private int reps;
 	private double weight;
+	private int timeDone;
 
-	public Set(LocalDate date, LocalTime time, Exercise exercise, int reps, double weight) {
+	public Set(LocalDate date, LocalTime time, Exercise exercise, int reps, double weight, int timeDone) {
 		super();
 		this.date = date;
 		this.time = time;
 		this.exercise = exercise;
 		this.reps = reps;
 		this.weight = Math.abs(weight);
+		this.timeDone = timeDone;
 	}
 
 	public double estimateErm(MaxEstimator estimator) {
@@ -70,9 +72,17 @@ public class Set {
 		this.weight = weight;
 	}
 
+	public int getTimeDone() {
+		return timeDone;
+	}
+
+	public void setTimeDone(int timeDone) {
+		this.timeDone = timeDone;
+	}
+
 	@Override
 	public String toString() {
-		return "Set [date=" + date + ", time=" + time + ", exercise=" + exercise + ", reps=" + reps + ", weight=" + weight + "]";
+		return "Set [date=" + date + ", time=" + time + ", exercise=" + exercise + ", reps=" + reps + ", weight=" + weight + ", timeDone=" + timeDone + "]";
 	}
 
 }

@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 
 import cc.ethon.logmaker.Exercise;
+import cc.ethon.logmaker.Exercise.ExerciseType;
 import cc.ethon.logmaker.Set;
 import cc.ethon.logmaker.Workout;
 import cc.ethon.logmaker.WorkoutLog;
@@ -31,6 +32,20 @@ public class RedyGymLogCsvReader implements LogReader {
 			throw new IllegalArgumentException("Could not read separator from stream");
 		}
 		return line.split("=")[1].trim();
+	}
+
+	private static ExerciseType determineExerciseType(boolean hasReps, boolean hasWeight, boolean hasTimeDone) {
+		if (hasReps) {
+			if (hasWeight) {
+				return ExerciseType.WeightReps;
+			} else {
+				return ExerciseType.Reps;
+			}
+		} else if (hasTimeDone) {
+			// TODO: Handle TimeDistance
+			return ExerciseType.Time;
+		}
+		throw new IllegalArgumentException("Unsupported exercise type");
 	}
 
 	public RedyGymLogCsvReader() {
@@ -49,19 +64,28 @@ public class RedyGymLogCsvReader implements LogReader {
 		String line;
 		final NumberFormat nf = NumberFormat.getInstance(Locale.GERMAN);
 		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("u/M/d H:m");
-		// final DateTimeFormatter tf = DateTimeFormatter.ofPattern("m':'s");
 		while ((line = in.readLine()) != null && !line.isEmpty()) {
 			final String[] parts = processLine(line, separator);
 
 			final LocalDate date = LocalDate.parse(parts[0], dtf);
 			final LocalTime time = LocalTime.parse(parts[0], dtf);
-			final Exercise exercise = new Exercise(parts[1]);
-			final int reps = parts[2].isEmpty() ? 0 : Integer.valueOf(parts[2]);
-			final double weight = parts[3].isEmpty() ? 0.0 : nf.parse(parts[3]).doubleValue();
-			// final LocalTime exerciseTime = parts[4].isEmpty() ?
-			// LocalTime.of(0,
-			// 0)
-			// : LocalTime.parse(parts[4], tf);
+
+			final boolean hasReps = !parts[2].isEmpty();
+			final int reps = hasReps ? Integer.valueOf(parts[2]) : 0;
+
+			final boolean hasWeight = !parts[3].isEmpty();
+			final double weight = hasWeight ? nf.parse(parts[3]).doubleValue() : 0.0;
+
+			final boolean hasTimeDone = !parts[4].isEmpty();
+			int timeDone = 0;
+			if (hasTimeDone) {
+				final String[] timeParts = parts[4].split(":");
+				final int minutes = Integer.valueOf(timeParts[0]);
+				final int seconds = Integer.valueOf(timeParts[1]);
+				timeDone = minutes * 60 + seconds;
+			}
+
+			final Exercise exercise = new Exercise(parts[1], determineExerciseType(hasReps, hasWeight, hasTimeDone));
 
 			Workout wo = workouts.get(date);
 			if (wo == null) {
@@ -69,7 +93,7 @@ public class RedyGymLogCsvReader implements LogReader {
 				workouts.put(date, wo);
 			}
 
-			wo.addSet(new Set(date, time, exercise, reps, weight));
+			wo.addSet(new Set(date, time, exercise, reps, weight, timeDone));
 		}
 
 		final List<Workout> woList = new ArrayList<Workout>(workouts.values());

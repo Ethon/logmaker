@@ -9,10 +9,16 @@
 	<#list workout.exercises as exercise>
 [b][u]${exercise.name}:[/u][/b]
 		<#list exercise.sets as set>
-			<#if !set.noWeight>
-[${set.time}] ${set.weight}kg x ${set.repetitions} (${ermFormulaName} ERM: <#if set.ermRecord>[color=#008000]${set.erm}kg[/color]<#else>${set.erm}kg</#if>)
-			<#else>
+			<#if exercise.timeOnly>
+[${set.time}] ${set.timeDone}
+			<#elseif exercise.repsOnly>
 [${set.time}] ${set.repetitions}*
+			<#elseif exercise.weightForReps>
+				<#if !set.noWeight>
+[${set.time}] ${set.weight}kg x ${set.repetitions} (${ermFormulaName} ERM: <#if set.ermRecord>[color=#008000]${set.erm}kg[/color]<#else>${set.erm}kg</#if>)
+				<#else>
+[${set.time}] ${set.repetitions}*
+				</#if>
 			</#if>
 		</#list>
 

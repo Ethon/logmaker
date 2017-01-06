@@ -2,15 +2,25 @@ package cc.ethon.logmaker;
 
 public class Exercise {
 
-	private final String name;
+	public enum ExerciseType {
+		Time, Reps, WeightTime, DistanceTime, WeightReps
+	}
 
-	public Exercise(String name) {
+	private final String name;
+	private final ExerciseType type;
+
+	public Exercise(String name, ExerciseType type) {
 		super();
 		this.name = name;
+		this.type = type;
 	}
 
 	public String getName() {
 		return name;
+	}
+
+	public ExerciseType getType() {
+		return type;
 	}
 
 	@Override
@@ -18,6 +28,7 @@ public class Exercise {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (name == null ? 0 : name.hashCode());
+		result = prime * result + (type == null ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -40,12 +51,15 @@ public class Exercise {
 		} else if (!name.equals(other.name)) {
 			return false;
 		}
+		if (type != other.type) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Exercise [name=" + name + "]";
+		return "Exercise [name=" + name + ", type=" + type + "]";
 	}
 
 }
