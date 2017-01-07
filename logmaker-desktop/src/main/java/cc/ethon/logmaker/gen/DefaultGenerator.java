@@ -1,9 +1,5 @@
 package cc.ethon.logmaker.gen;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
@@ -20,7 +16,7 @@ import cc.ethon.logmaker.formula.MaxEstimator;
 // Deprecated 2017-01-06
 // Deprecated DefaultGenerator as the TemplateGenerator already has more
 // features and is the better choice for future development
-public class DefaultGenerator implements Generator {
+public class DefaultGenerator extends Generator {
 
 	private static void genWorkout(PrintStream out, Workout wo, WorkoutLog log, MaxEstimator maxEstimator) {
 		final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("E, d.L.u", Locale.GERMAN);
@@ -71,30 +67,13 @@ public class DefaultGenerator implements Generator {
 	}
 
 	@Override
-	public void gen(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) {
-
+	protected void generate(Sink sink, WorkoutLog log, MaxEstimator maxEstimator) throws Exception {
+		final PrintStream out = new PrintStream(sink.getOutputStream());
 		for (final Workout wo : log.getWorkouts()) {
 			genWorkout(out, wo, log, maxEstimator);
 		}
-	}
-
-	@Override
-	public void genLastWorkout(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) {
-		if (log.getWorkouts().isEmpty()) {
-			return;
-		}
-		genWorkout(out, log.getWorkouts().get(log.getWorkouts().size() - 1), log, maxEstimator);
-	}
-
-	@Override
-	public void genLastWorkoutToClipboard(WorkoutLog log, MaxEstimator maxEstimator) {
-		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		final PrintStream ps = new PrintStream(baos);
-		genLastWorkout(ps, log, maxEstimator);
-
-		final Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-		final StringSelection data = new StringSelection(baos.toString());
-		c.setContents(data, data);
+		out.flush();
+		sink.applyContent();
 	}
 
 }

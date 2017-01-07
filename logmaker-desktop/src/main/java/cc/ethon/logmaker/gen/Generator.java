@@ -1,15 +1,24 @@
 package cc.ethon.logmaker.gen;
 
-import java.io.PrintStream;
-
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.MaxEstimator;
 
-public interface Generator {
+public abstract class Generator {
 
-	public void gen(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) throws Exception;
+	public static final int ALL_WORKOUTS = -1;
 
-	public void genLastWorkout(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) throws Exception;
+	protected abstract void generate(Sink sink, WorkoutLog log, MaxEstimator maxEstimator) throws Exception;
 
-	public void genLastWorkoutToClipboard(WorkoutLog log, MaxEstimator maxEstimator) throws Exception;
+	public void generate(Sink sink, WorkoutLog log, MaxEstimator maxEstimator, int count) throws Exception {
+		final int workoutCount = log.getWorkouts().size();
+		final int toGenerate = count >= 0 ? Math.min(workoutCount, count) : workoutCount;
+		WorkoutLog logToGenerate = log;
+		if (toGenerate != workoutCount) {
+			logToGenerate = new WorkoutLog();
+			for (int i = toGenerate; i > 0; --i) {
+				logToGenerate.addWorkout(log.getWorkouts().get(workoutCount - i));
+			}
+		}
+		generate(sink, logToGenerate, maxEstimator);
+	}
 }

@@ -1,12 +1,7 @@
 package cc.ethon.logmaker.gen;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +13,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 
-public class TemplateGenerator implements Generator {
+public class TemplateGenerator extends Generator {
 
 	private final Configuration configuration;
 	private final List<String> availableTemplates;
@@ -86,30 +81,12 @@ public class TemplateGenerator implements Generator {
 	}
 
 	@Override
-	public void gen(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) throws Exception {
+	protected void generate(Sink sink, WorkoutLog log, MaxEstimator maxEstimator) throws Exception {
 		final Template template = configuration.getTemplate(selectedTemplate);
-		template.process(new WorkoutLogModel(log, maxEstimator), new PrintWriter(out));
-	}
-
-	@Override
-	public void genLastWorkout(PrintStream out, WorkoutLog log, MaxEstimator maxEstimator) throws Exception {
-		if (log.getWorkouts().isEmpty()) {
-			throw new UnsupportedOperationException("Can't generate last workout when no workouts are available");
-		}
-		final WorkoutLog syntheticLog = new WorkoutLog();
-		syntheticLog.addWorkout(log.getWorkouts().get(log.getWorkouts().size() - 1));
-		gen(out, syntheticLog, maxEstimator);
-	}
-
-	@Override
-	public void genLastWorkoutToClipboard(WorkoutLog log, MaxEstimator maxEstimator) throws Exception {
-		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		final PrintStream ps = new PrintStream(baos);
-		genLastWorkout(ps, log, maxEstimator);
-
-		final Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
-		final StringSelection data = new StringSelection(baos.toString());
-		c.setContents(data, data);
+		final PrintWriter writer = new PrintWriter(sink.getOutputStream());
+		template.process(new WorkoutLogModel(log, maxEstimator), writer);
+		writer.flush();
+		sink.applyContent();
 	}
 
 }
