@@ -12,6 +12,17 @@ Creates formatted reports out of exports/backups of gym workout log apps
 Tested:
 * 64bit (x64) Windows with Oracle JDK 8
 
+### Prerequisites:
+* Get and install Java 8 (or later) if not already installed. https://java.com/en/download/
+
+### Build instructions:
+1. Clone or download the source code
+
+#### Desktop:
+* Navigate to logmaker-desktop
+* Run ```mvn package```
+
+
 ## Redy Gym Log Desktop-Guide
 1. Workout ;)
 2. Navigate to export or backup in the app's menu and select Cloud Backup or Cloud Export, export to your favorite cloud provider like Dropbox.
@@ -22,4 +33,11 @@ Tested:
 5. Select the redyGymLog.db or RedyGymLog.csv file accordingly.
 6. Select your favorite template
 7. Generate
+
+## Template Guide
+Templates can be found under templates/ and contain template text using the FreeMarker template engine.
+
+Take a look at FreeMarker's template author documentation to start writing your own templates. http://freemarker.org/docs/dgui.html
+
+Templates can simply be dropped into the templates/ directory, a restart of logmaker is required to detect newly added templates but templates can be changed while the application is running.
 
