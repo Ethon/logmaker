@@ -42,6 +42,13 @@ public class SetModel {
 		return String.format("%dh %dmin %ds", hours, minutes, seconds);
 	}
 
+	public String getDistance() {
+		int meters = set.getDistance();
+		final int kiloMeters = meters / 1000;
+		meters -= kiloMeters * 1000;
+		return String.format("%dkm %dm", kiloMeters, meters);
+	}
+
 	public String getErm() {
 		return WEIGHT_FORMATTER.format(maxEstimator.estimate(set));
 	}

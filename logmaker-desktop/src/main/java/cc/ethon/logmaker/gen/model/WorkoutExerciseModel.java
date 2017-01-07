@@ -45,6 +45,14 @@ public class WorkoutExerciseModel {
 		return exercise.getExercise().getType() == ExerciseType.WeightReps;
 	}
 
+	public boolean isWeightForTime() {
+		return exercise.getExercise().getType() == ExerciseType.WeightTime;
+	}
+
+	public boolean isDistanceForTime() {
+		return exercise.getExercise().getType() == ExerciseType.DistanceTime;
+	}
+
 	@Override
 	public String toString() {
 		return "WorkoutExerciseModel [exercise=" + exercise + "]";

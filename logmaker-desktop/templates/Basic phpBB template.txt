@@ -13,6 +13,10 @@
 [${set.time}] ${set.timeDone}
 			<#elseif exercise.repsOnly>
 [${set.time}] ${set.repetitions}*
+			<#elseif exercise.weightForTime>
+[${set.time}] ${set.weight} : ${set.timeDone}
+			<#elseif exercise.distanceForTime>
+[${set.time}] ${set.distance} : ${set.timeDone}
 			<#elseif exercise.weightForReps>
 				<#if !set.noWeight>
 [${set.time}] ${set.weight}kg x ${set.repetitions} (${ermFormulaName} ERM: <#if set.ermRecord>[color=#008000]${set.erm}kg[/color]<#else>${set.erm}kg</#if>)
