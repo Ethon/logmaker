@@ -57,49 +57,52 @@ public class RedyGymLogDbReader implements LogReader {
 	public WorkoutLog readLog() throws Exception {
 		Class.forName("org.sqlite.JDBC");
 		final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + backupFile.getAbsolutePath());
+		try {
+			// Iterate all sets.
+			final Map<LocalDate, Workout> workouts = new TreeMap<LocalDate, Workout>();
+			final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("u-M-d H:m:s");
+			try (SetDao setDao = new SetDao(connection)) {
+				final ExerciseDao exerciseDao = new ExerciseDao(connection);
+				try {
+					for (final SetDomainObject set : setDao.getAllSets()) {
+						final ExerciseDomainObject exerciseDo = exerciseDao.getExerciseById(set.getExerciseId());
 
-		// Iterate all sets.
-		final Map<LocalDate, Workout> workouts = new TreeMap<LocalDate, Workout>();
-		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("u-M-d H:m:s");
-		try (SetDao setDao = new SetDao(connection)) {
-			final ExerciseDao exerciseDao = new ExerciseDao(connection);
-			try {
-				for (final SetDomainObject set : setDao.getAllSets()) {
-					final ExerciseDomainObject exerciseDo = exerciseDao.getExerciseById(set.getExerciseId());
+						// Remove microsecond part
+						// like 2016-11-07 17:07:47.336000
+						final String dateString = set.getDate().split("\\.")[0];
+						final LocalDate date = LocalDate.parse(dateString, dtf);
+						final LocalTime time = LocalTime.parse(dateString, dtf);
+						final int timeDone = set.getTime();
+						final int reps = set.getRepeats();
+						final double weight = set.getWeightGrams() > 0 ? set.getWeightGrams() * 1.0 / 1000 : 0.0;
+						final int distance = set.getDistance();
+						final Exercise exercise = new Exercise(exerciseDo.getName(), convertType(exerciseDo));
 
-					// Remove microsecond part
-					// like 2016-11-07 17:07:47.336000
-					final String dateString = set.getDate().split("\\.")[0];
-					final LocalDate date = LocalDate.parse(dateString, dtf);
-					final LocalTime time = LocalTime.parse(dateString, dtf);
-					final int timeDone = set.getTime();
-					final int reps = set.getRepeats();
-					final double weight = set.getWeightGrams() > 0 ? set.getWeightGrams() * 1.0 / 1000 : 0.0;
-					final int distance = set.getDistance();
-					final Exercise exercise = new Exercise(exerciseDo.getName(), convertType(exerciseDo));
-
-					Workout wo = workouts.get(date);
-					if (wo == null) {
-						try (WorkoutRoutineDao workoutRoutineDao = new WorkoutRoutineDao(connection)) {
-							final WorkoutRoutineDomainObject matchingWorkout = workoutRoutineDao.getWorkoutRoutineByLastTrainedDate(date);
-							if (matchingWorkout != null) {
-								wo = new Workout(Optional.of(matchingWorkout.getName()), date);
-							} else {
-								wo = new Workout(Optional.empty(), date);
+						Workout wo = workouts.get(date);
+						if (wo == null) {
+							try (WorkoutRoutineDao workoutRoutineDao = new WorkoutRoutineDao(connection)) {
+								final WorkoutRoutineDomainObject matchingWorkout = workoutRoutineDao.getWorkoutRoutineByLastTrainedDate(date);
+								if (matchingWorkout != null) {
+									wo = new Workout(Optional.of(matchingWorkout.getName()), date);
+								} else {
+									wo = new Workout(Optional.empty(), date);
+								}
 							}
+
+							workouts.put(date, wo);
 						}
-
-						workouts.put(date, wo);
+						wo.addSet(new Set(date, time, exercise, reps, weight, timeDone, distance));
 					}
-					wo.addSet(new Set(date, time, exercise, reps, weight, timeDone, distance));
+				} finally {
+					exerciseDao.close();
 				}
-			} finally {
-				exerciseDao.close();
 			}
-		}
 
-		final List<Workout> woList = new ArrayList<Workout>(workouts.values());
-		return new WorkoutLog(woList);
+			final List<Workout> woList = new ArrayList<Workout>(workouts.values());
+			return new WorkoutLog(woList);
+		} finally {
+			connection.close();
+		}
 	}
 
 }
