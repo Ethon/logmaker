@@ -28,6 +28,8 @@ public class RedyGymLogDbReader implements LogReader {
 	private static final int DISTANCE_TIME_KM = 1;
 	private static final int REPS_WEIGHT = 0;
 
+	private final File backupFile;
+
 	private static ExerciseType convertType(ExerciseDomainObject exercise) {
 		switch (exercise.getType()) {
 		case REPS_WEIGHT:
@@ -46,13 +48,15 @@ public class RedyGymLogDbReader implements LogReader {
 		}
 	}
 
-	public RedyGymLogDbReader() {
+	public RedyGymLogDbReader(File backupFile) {
+		super();
+		this.backupFile = backupFile;
 	}
 
 	@Override
-	public WorkoutLog readLog(File input) throws Exception {
+	public WorkoutLog readLog() throws Exception {
 		Class.forName("org.sqlite.JDBC");
-		final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + input.getAbsolutePath());
+		final Connection connection = DriverManager.getConnection("jdbc:sqlite:" + backupFile.getAbsolutePath());
 
 		// Iterate all sets.
 		final Map<LocalDate, Workout> workouts = new TreeMap<LocalDate, Workout>();

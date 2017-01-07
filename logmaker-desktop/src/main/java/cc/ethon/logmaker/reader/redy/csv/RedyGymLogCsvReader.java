@@ -26,6 +26,8 @@ import cc.ethon.logmaker.reader.LogReader;
 
 public class RedyGymLogCsvReader implements LogReader {
 
+	private final File exportFile;
+
 	private static String getSeparator(BufferedReader in) throws IOException {
 		final String line = in.readLine();
 		if (!line.startsWith("sep=")) {
@@ -53,12 +55,14 @@ public class RedyGymLogCsvReader implements LogReader {
 		throw new IllegalArgumentException("Unsupported exercise type");
 	}
 
-	public RedyGymLogCsvReader() {
+	public RedyGymLogCsvReader(File exportFile) {
+		super();
+		this.exportFile = exportFile;
 	}
 
 	@Override
-	public WorkoutLog readLog(File input) throws IOException, ParseException {
-		final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(input)));
+	public WorkoutLog readLog() throws IOException, ParseException {
+		final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(exportFile)));
 		final String separator = getSeparator(in);
 
 		// Skip description line.
