@@ -71,6 +71,7 @@ public class RedyGymLogDbReader implements LogReader {
 					final int timeDone = set.getTime();
 					final int reps = set.getRepeats();
 					final double weight = set.getWeightGrams() > 0 ? set.getWeightGrams() * 1.0 / 1000 : 0.0;
+					final int distance = set.getDistance();
 					final Exercise exercise = new Exercise(exerciseDo.getName(), convertType(exerciseDo));
 
 					Workout wo = workouts.get(date);
@@ -86,7 +87,7 @@ public class RedyGymLogDbReader implements LogReader {
 
 						workouts.put(date, wo);
 					}
-					wo.addSet(new Set(date, time, exercise, reps, weight, timeDone));
+					wo.addSet(new Set(date, time, exercise, reps, weight, timeDone, distance));
 				}
 			} finally {
 				exerciseDao.close();

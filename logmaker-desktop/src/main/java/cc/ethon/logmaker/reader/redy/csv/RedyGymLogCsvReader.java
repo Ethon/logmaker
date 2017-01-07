@@ -34,7 +34,7 @@ public class RedyGymLogCsvReader implements LogReader {
 		return line.split("=")[1].trim();
 	}
 
-	private static ExerciseType determineExerciseType(boolean hasReps, boolean hasWeight, boolean hasTimeDone) {
+	private static ExerciseType determineExerciseType(boolean hasReps, boolean hasWeight, boolean hasTimeDone, boolean hasDistance) {
 		if (hasReps) {
 			if (hasWeight) {
 				return ExerciseType.WeightReps;
@@ -42,8 +42,13 @@ public class RedyGymLogCsvReader implements LogReader {
 				return ExerciseType.Reps;
 			}
 		} else if (hasTimeDone) {
-			// TODO: Handle TimeDistance
-			return ExerciseType.Time;
+			if (hasDistance) {
+				return ExerciseType.DistanceTime;
+			} else if (hasWeight) {
+				return ExerciseType.WeightTime;
+			} else {
+				return ExerciseType.Time;
+			}
 		}
 		throw new IllegalArgumentException("Unsupported exercise type");
 	}
@@ -87,7 +92,10 @@ public class RedyGymLogCsvReader implements LogReader {
 				timeDone = hours * 3600 + minutes * 60 + seconds;
 			}
 
-			final Exercise exercise = new Exercise(parts[1], determineExerciseType(hasReps, hasWeight, hasTimeDone));
+			final boolean hasDistance = !parts[5].isEmpty();
+			final int distance = hasDistance ? Integer.valueOf(parts[5]) : 0;
+
+			final Exercise exercise = new Exercise(parts[1], determineExerciseType(hasReps, hasWeight, hasTimeDone, hasDistance));
 
 			Workout wo = workouts.get(date);
 			if (wo == null) {
@@ -95,7 +103,7 @@ public class RedyGymLogCsvReader implements LogReader {
 				workouts.put(date, wo);
 			}
 
-			wo.addSet(new Set(date, time, exercise, reps, weight, timeDone));
+			wo.addSet(new Set(date, time, exercise, reps, weight, timeDone, distance));
 		}
 
 		final List<Workout> woList = new ArrayList<Workout>(workouts.values());

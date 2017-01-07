@@ -7,14 +7,15 @@ import cc.ethon.logmaker.formula.MaxEstimator;
 
 public class Set {
 
-	private LocalDate date;
-	private LocalTime time;
-	private Exercise exercise;
-	private int reps;
-	private double weight;
-	private int timeDone;
+	private final LocalDate date;
+	private final LocalTime time;
+	private final Exercise exercise;
+	private final int reps;
+	private final double weight;
+	private final int timeDone;
+	private final int distance;
 
-	public Set(LocalDate date, LocalTime time, Exercise exercise, int reps, double weight, int timeDone) {
+	public Set(LocalDate date, LocalTime time, Exercise exercise, int reps, double weight, int timeDone, int distance) {
 		super();
 		this.date = date;
 		this.time = time;
@@ -22,6 +23,7 @@ public class Set {
 		this.reps = reps;
 		this.weight = Math.abs(weight);
 		this.timeDone = timeDone;
+		this.distance = distance;
 	}
 
 	public double estimateErm(MaxEstimator estimator) {
@@ -52,37 +54,18 @@ public class Set {
 		return getWeight() * getReps();
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public void setExercise(Exercise exercise) {
-		this.exercise = exercise;
-	}
-
-	public void setReps(int reps) {
-		this.reps = reps;
-	}
-
-	public void setTime(LocalTime time) {
-		this.time = time;
-	}
-
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
-
 	public int getTimeDone() {
 		return timeDone;
 	}
 
-	public void setTimeDone(int timeDone) {
-		this.timeDone = timeDone;
+	public int getDistance() {
+		return distance;
 	}
 
 	@Override
 	public String toString() {
-		return "Set [date=" + date + ", time=" + time + ", exercise=" + exercise + ", reps=" + reps + ", weight=" + weight + ", timeDone=" + timeDone + "]";
+		return "Set [date=" + date + ", time=" + time + ", exercise=" + exercise + ", reps=" + reps + ", weight=" + weight + ", timeDone=" + timeDone
+				+ ", distance=" + distance + "]";
 	}
 
 }
