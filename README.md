@@ -1,6 +1,8 @@
 # logmaker
 Creates formatted reports out of exports/backups of gym workout log apps
 
+![Image of the logmaker UI](https://picload.org/image/rawpccap/logmaker.png)
+
 ### Supported workout apps
 * [Android] Redy Gym Log
   * Desktop version: CSV exports and Database backups are supported.
