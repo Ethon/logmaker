@@ -28,7 +28,8 @@ import cc.ethon.logmaker.formula.WendlerFormula;
 import cc.ethon.logmaker.gen.Generator;
 import cc.ethon.logmaker.gui.gen.GeneratorController;
 import cc.ethon.logmaker.gui.reader.LogReaderController;
-import cc.ethon.logmaker.sink.ClipboardSink;
+import cc.ethon.logmaker.gui.sink.SinkController;
+import cc.ethon.logmaker.sink.Sink;
 
 public class MainWindow extends VBox {
 
@@ -37,6 +38,7 @@ public class MainWindow extends VBox {
 
 	private ComboBox<LogReaderController> selectedLogReaderComboBox;
 	private ComboBox<GeneratorController> selectedGeneratorComboBox;
+	private ComboBox<SinkController> selectedSinkComboBox;
 
 	private void createReaderSelection() throws IOException {
 		final Label label = new Label("Select the workoutlog reader");
@@ -86,6 +88,30 @@ public class MainWindow extends VBox {
 		getChildren().add(generatorPart);
 	}
 
+	private void createSinkSelection() {
+		final Label label = new Label("Select where the log is generated to");
+		VBox.setMargin(label, new Insets(0, 0, 10, 0));
+
+		selectedSinkComboBox = new ComboBox<SinkController>();
+		selectedSinkComboBox.setItems(model.getSinks());
+		selectedSinkComboBox.getSelectionModel().select(model.getSelectedSink().get());
+		model.getSelectedSink().bind(selectedSinkComboBox.getSelectionModel().selectedIndexProperty());
+
+		final SinkController sink = model.getSinks().get(model.getSelectedSink().get());
+		final TitledPane optionsPane = new TitledPane("Sink Options", sink.getOptionsView(stage));
+
+		selectedSinkComboBox.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+			optionsPane.setContent(n.getOptionsView(stage));
+		});
+		VBox.setMargin(selectedSinkComboBox, new Insets(0, 0, 10, 0));
+
+		final VBox sinkPart = new VBox(label, selectedSinkComboBox, optionsPane);
+		sinkPart.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+		VBox.setMargin(sinkPart, new Insets(0, 10, 10, 10));
+		sinkPart.setPadding(new Insets(10));
+		getChildren().add(sinkPart);
+	}
+
 	private void createOptionsRow() {
 		final CheckBox closeApplication = new CheckBox("Close logmaker after generation");
 		closeApplication.setSelected(model.getCloseApplication().get());
@@ -98,7 +124,7 @@ public class MainWindow extends VBox {
 	}
 
 	private void createGenerateButton() {
-		final Button generate = new Button("Generate and copy last workout to clipboard");
+		final Button generate = new Button("Generate last workout");
 		generate.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -109,7 +135,10 @@ public class MainWindow extends VBox {
 					final GeneratorController generatorController = selectedGeneratorComboBox.getSelectionModel().getSelectedItem();
 					final Generator generator = generatorController.getGenerator();
 
-					generator.generate(new ClipboardSink(), log, new WendlerFormula(), 1);
+					final SinkController sinkController = selectedSinkComboBox.getSelectionModel().getSelectedItem();
+					final Sink sink = sinkController.createSink();
+
+					generator.generate(sink, log, new WendlerFormula(), 1);
 
 					readerController.postProcess();
 					if (model.getCloseApplication().get()) {
@@ -131,6 +160,7 @@ public class MainWindow extends VBox {
 
 		createReaderSelection();
 		createGeneratorSelection();
+		createSinkSelection();
 		createOptionsRow();
 		createGenerateButton();
 	}
