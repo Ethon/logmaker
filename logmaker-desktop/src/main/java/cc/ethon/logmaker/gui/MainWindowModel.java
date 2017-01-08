@@ -31,12 +31,14 @@ public class MainWindowModel {
 	private final static String KEY_SELECTEDGENERATOR = MainWindowModel.class.getSimpleName() + ".selectedGenerator";
 	private final static String KEY_SELECTEDSINK = MainWindowModel.class.getSimpleName() + ".selectedSink";
 	private final static String KEY_SELECTEDFORMULA = MainWindowModel.class.getSimpleName() + ".selectedFormula";
+	private final static String KEY_WORKOUTSTOGENERATE = MainWindowModel.class.getSimpleName() + ".workoutsToGenerate";
 
 	private final BooleanProperty closeApplication;
 	private final IntegerProperty selectedLogReader;
 	private final IntegerProperty selectedGenerator;
 	private final IntegerProperty selectedSink;
 	private final IntegerProperty selectedFormula;
+	private final IntegerProperty workoutsToGenerate;
 	private final ObservableList<LogReaderController> logReaders;
 	private final ObservableList<GeneratorController> generators;
 	private final ObservableList<SinkController> sinks;
@@ -58,6 +60,9 @@ public class MainWindowModel {
 
 		selectedFormula = new SimpleIntegerProperty(settings.getInt(KEY_SELECTEDFORMULA, 0));
 		selectedFormula.addListener((obs, o, n) -> settings.setInt(KEY_SELECTEDFORMULA, n.intValue()));
+
+		workoutsToGenerate = new SimpleIntegerProperty(settings.getInt(KEY_WORKOUTSTOGENERATE, 1));
+		workoutsToGenerate.addListener((obs, o, n) -> settings.setInt(KEY_WORKOUTSTOGENERATE, n.intValue()));
 
 		// Changing the order will cause setting to be invalid!
 		logReaders = FXCollections.observableArrayList( //
@@ -102,6 +107,10 @@ public class MainWindowModel {
 
 	public IntegerProperty getSelectedFormula() {
 		return selectedFormula;
+	}
+
+	public IntegerProperty getWorkoutsToGenerate() {
+		return workoutsToGenerate;
 	}
 
 	public ObservableList<LogReaderController> getLogReaders() {

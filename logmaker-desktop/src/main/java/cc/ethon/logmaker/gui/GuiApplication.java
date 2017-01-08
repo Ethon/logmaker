@@ -16,7 +16,7 @@ public class GuiApplication extends Application {
 		try {
 			primaryStage.setTitle("logmaker");
 			final MainWindow mainWindow = new MainWindow(primaryStage, new MainWindowModel(Settings.getInstance()));
-			primaryStage.setScene(new Scene(mainWindow, 600, 250));
+			primaryStage.setScene(new Scene(mainWindow, 600, 750));
 			primaryStage.show();
 		} catch (final Exception e) {
 			e.printStackTrace();

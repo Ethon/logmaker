@@ -13,6 +13,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -114,7 +116,7 @@ public class MainWindow extends VBox {
 	}
 
 	private void createFormulaSelection() {
-		final Label label = new Label("Select a formula to estimate the 1RM:");
+		final Label label = new Label("Select the formula to estimate the 1RM:");
 		HBox.setMargin(label, new Insets(0, 10, 0, 0));
 
 		selectedFormulaComboBox = new ComboBox<MaxEstimator>();
@@ -129,19 +131,18 @@ public class MainWindow extends VBox {
 		getChildren().add(sinkPart);
 	}
 
-	private void createOptionsRow() {
-		final CheckBox closeApplication = new CheckBox("Close logmaker after generation");
-		closeApplication.setSelected(model.getCloseApplication().get());
-		model.getCloseApplication().bind(closeApplication.selectedProperty());
-		HBox.setMargin(closeApplication, new Insets(10));
-
-		final HBox hbox = new HBox();
-		hbox.getChildren().addAll(closeApplication);
-		getChildren().add(hbox);
-	}
-
 	private void createGenerateButton() {
-		final Button generate = new Button("Generate last workout");
+		final Label label = new Label("Select the number of workouts to generate:");
+		HBox.setMargin(label, new Insets(0, 10, 0, 0));
+
+		final Spinner<Integer> spinner = new Spinner<Integer>();
+		spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, model.getWorkoutsToGenerate().get()));
+		model.getWorkoutsToGenerate().bind(spinner.valueProperty());
+
+		final HBox selectionPart = new HBox(label, spinner);
+		VBox.setMargin(selectionPart, new Insets(0, 0, 10, 0));
+
+		final Button generate = new Button("Generate report");
 		generate.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -157,7 +158,7 @@ public class MainWindow extends VBox {
 
 					final MaxEstimator formula = selectedFormulaComboBox.getSelectionModel().getSelectedItem();
 
-					generator.generate(sink, log, formula, 1);
+					generator.generate(sink, log, formula, model.getWorkoutsToGenerate().get());
 
 					readerController.postProcess();
 					if (model.getCloseApplication().get()) {
@@ -170,7 +171,19 @@ public class MainWindow extends VBox {
 				}
 			}
 		});
-		getChildren().add(generate);
+		HBox.setMargin(generate, new Insets(0, 10, 0, 0));
+
+		final CheckBox closeApplication = new CheckBox("Close logmaker after generation");
+		closeApplication.setSelected(model.getCloseApplication().get());
+		model.getCloseApplication().bind(closeApplication.selectedProperty());
+
+		final HBox generatePart = new HBox(generate, closeApplication);
+
+		final VBox box = new VBox(selectionPart, generatePart);
+		box.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+		VBox.setMargin(box, new Insets(0, 10, 10, 10));
+		box.setPadding(new Insets(10));
+		getChildren().add(box);
 	}
 
 	public MainWindow(Stage stage, MainWindowModel model) throws Exception {
@@ -181,7 +194,6 @@ public class MainWindow extends VBox {
 		createGeneratorSelection();
 		createSinkSelection();
 		createFormulaSelection();
-		createOptionsRow();
 		createGenerateButton();
 	}
 
