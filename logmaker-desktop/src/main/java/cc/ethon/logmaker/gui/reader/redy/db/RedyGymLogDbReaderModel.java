@@ -16,14 +16,14 @@ public class RedyGymLogDbReaderModel {
 
 	public RedyGymLogDbReaderModel(Settings settings) {
 		backupFile = new SimpleStringProperty();
-		if (settings.getSettingByKey(KEY_BACKUPFILE) != null) {
-			backupFile.set(settings.getSettingByKey(KEY_BACKUPFILE));
+		if (settings.getString(KEY_BACKUPFILE) != null) {
+			backupFile.set(settings.getString(KEY_BACKUPFILE));
 		}
-		backupFile.addListener((obs, o, n) -> settings.setSettingByKey(KEY_BACKUPFILE, n));
+		backupFile.addListener((obs, o, n) -> settings.setString(KEY_BACKUPFILE, n));
 
 		deleteBackupFile = new SimpleBooleanProperty();
-		deleteBackupFile.set("true".equals(settings.getSettingByKey(KEY_DELETEBACKUPFILE)));
-		deleteBackupFile.addListener((obs, o, n) -> settings.setSettingByKey(KEY_DELETEBACKUPFILE, Boolean.toString(n)));
+		deleteBackupFile.set(settings.getBoolean(KEY_DELETEBACKUPFILE));
+		deleteBackupFile.addListener((obs, o, n) -> settings.setBoolean(KEY_DELETEBACKUPFILE, n));
 	}
 
 	public StringProperty getBackupFile() {

@@ -1,11 +1,8 @@
 package cc.ethon.logmaker.gui;
 
 import java.io.IOException;
-import java.util.List;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -26,14 +23,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import cc.ethon.logmaker.Settings;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.WendlerFormula;
 import cc.ethon.logmaker.gen.ClipboardSink;
-import cc.ethon.logmaker.gen.TemplateGenerator;
+import cc.ethon.logmaker.gen.Generator;
+import cc.ethon.logmaker.gui.gen.GeneratorController;
 import cc.ethon.logmaker.gui.reader.LogReaderController;
-import cc.ethon.logmaker.gui.reader.redy.csv.RedyGymLogCsvReaderController;
-import cc.ethon.logmaker.gui.reader.redy.db.RedyGymLogDbReaderController;
 
 public class MainWindow extends VBox {
 
@@ -41,23 +36,18 @@ public class MainWindow extends VBox {
 	private final MainWindowModel model;
 
 	private ComboBox<LogReaderController> selectedLogReaderComboBox;
-	private ComboBox<String> selectedTemplateComboBox;
+	private ComboBox<GeneratorController> selectedGeneratorComboBox;
 
 	private void createReaderSelection() throws IOException {
-		// Changing the order will cause setting to be invalid!
-		final ObservableList<LogReaderController> logReaders = FXCollections.observableArrayList( //
-				new RedyGymLogCsvReaderController(Settings.getInstance()), //
-				new RedyGymLogDbReaderController(Settings.getInstance()));
-
 		final Label label = new Label("Select the workoutlog reader");
 		VBox.setMargin(label, new Insets(0, 0, 10, 0));
 
 		selectedLogReaderComboBox = new ComboBox<LogReaderController>();
-		selectedLogReaderComboBox.setItems(logReaders);
+		selectedLogReaderComboBox.setItems(model.getLogReaders());
 		selectedLogReaderComboBox.getSelectionModel().select(model.getSelectedLogReader().get());
 		model.getSelectedLogReader().bind(selectedLogReaderComboBox.getSelectionModel().selectedIndexProperty());
 
-		final LogReaderController logReader = logReaders.get(model.getSelectedLogReader().get());
+		final LogReaderController logReader = model.getLogReaders().get(model.getSelectedLogReader().get());
 		final TitledPane optionsPane = new TitledPane("Reader Options", logReader.getOptionsView(stage));
 
 		selectedLogReaderComboBox.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
@@ -72,6 +62,30 @@ public class MainWindow extends VBox {
 		getChildren().add(readerPart);
 	}
 
+	private void createGeneratorSelection() {
+		final Label label = new Label("Select the generator");
+		VBox.setMargin(label, new Insets(0, 0, 10, 0));
+
+		selectedGeneratorComboBox = new ComboBox<GeneratorController>();
+		selectedGeneratorComboBox.setItems(model.getGenerators());
+		selectedGeneratorComboBox.getSelectionModel().select(model.getSelectedGenerator().get());
+		model.getSelectedGenerator().bind(selectedGeneratorComboBox.getSelectionModel().selectedIndexProperty());
+
+		final GeneratorController generator = model.getGenerators().get(model.getSelectedGenerator().get());
+		final TitledPane optionsPane = new TitledPane("Generator Options", generator.getOptionsView(stage));
+
+		selectedGeneratorComboBox.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+			optionsPane.setContent(n.getOptionsView(stage));
+		});
+		VBox.setMargin(selectedGeneratorComboBox, new Insets(0, 0, 10, 0));
+
+		final VBox generatorPart = new VBox(label, selectedGeneratorComboBox, optionsPane);
+		generatorPart.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+		VBox.setMargin(generatorPart, new Insets(0, 10, 10, 10));
+		generatorPart.setPadding(new Insets(10));
+		getChildren().add(generatorPart);
+	}
+
 	private void createOptionsRow() {
 		final CheckBox closeApplication = new CheckBox("Close logmaker after generation");
 		closeApplication.setSelected(model.getCloseApplication().get());
@@ -83,23 +97,6 @@ public class MainWindow extends VBox {
 		getChildren().add(hbox);
 	}
 
-	private void createTemplateFileSelection() throws IOException {
-		final List<String> availableTemplates = model.getGenerator().getAvailableTemplates();
-		final String previouslySelectedTemplate = model.getSelectedTemplate().get();
-
-		selectedTemplateComboBox = new ComboBox<String>();
-		selectedTemplateComboBox.setItems(FXCollections.observableArrayList(availableTemplates));
-
-		if (previouslySelectedTemplate != null && availableTemplates.contains(previouslySelectedTemplate)) {
-			selectedTemplateComboBox.getSelectionModel().select(previouslySelectedTemplate);
-		} else if (!availableTemplates.isEmpty()) {
-			selectedTemplateComboBox.getSelectionModel().select(0);
-		}
-
-		model.getSelectedTemplate().bind(selectedTemplateComboBox.getSelectionModel().selectedItemProperty());
-		getChildren().add(selectedTemplateComboBox);
-	}
-
 	private void createGenerateButton() {
 		final Button generate = new Button("Generate and copy last workout to clipboard");
 		generate.setOnAction(new EventHandler<ActionEvent>() {
@@ -109,8 +106,9 @@ public class MainWindow extends VBox {
 					final LogReaderController readerController = selectedLogReaderComboBox.getSelectionModel().getSelectedItem();
 					final WorkoutLog log = readerController.createReader().readLog();
 
-					final TemplateGenerator generator = model.getGenerator();
-					generator.selectTemplate(selectedTemplateComboBox.getSelectionModel().getSelectedItem());
+					final GeneratorController generatorController = selectedGeneratorComboBox.getSelectionModel().getSelectedItem();
+					final Generator generator = generatorController.getGenerator();
+
 					generator.generate(new ClipboardSink(), log, new WendlerFormula(), 1);
 
 					readerController.postProcess();
@@ -132,8 +130,8 @@ public class MainWindow extends VBox {
 		this.model = model;
 
 		createReaderSelection();
+		createGeneratorSelection();
 		createOptionsRow();
-		createTemplateFileSelection();
 		createGenerateButton();
 	}
 

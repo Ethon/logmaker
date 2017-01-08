@@ -16,14 +16,14 @@ public class RedyGymLogCsvReaderModel {
 
 	public RedyGymLogCsvReaderModel(Settings settings) {
 		exportFile = new SimpleStringProperty();
-		if (settings.getSettingByKey(KEY_EXPORTFILE) != null) {
-			exportFile.set(settings.getSettingByKey(KEY_EXPORTFILE));
+		if (settings.getString(KEY_EXPORTFILE) != null) {
+			exportFile.set(settings.getString(KEY_EXPORTFILE));
 		}
-		exportFile.addListener((obs, o, n) -> settings.setSettingByKey(KEY_EXPORTFILE, n));
+		exportFile.addListener((obs, o, n) -> settings.setString(KEY_EXPORTFILE, n));
 
 		deleteExportFile = new SimpleBooleanProperty();
-		deleteExportFile.set("true".equals(settings.getSettingByKey(KEY_DELETEEXPORTFILE)));
-		deleteExportFile.addListener((obs, o, n) -> settings.setSettingByKey(KEY_DELETEEXPORTFILE, Boolean.toString(n)));
+		deleteExportFile.set(settings.getBoolean(KEY_DELETEEXPORTFILE));
+		deleteExportFile.addListener((obs, o, n) -> settings.setBoolean(KEY_DELETEEXPORTFILE, n));
 	}
 
 	public StringProperty getExportFile() {
