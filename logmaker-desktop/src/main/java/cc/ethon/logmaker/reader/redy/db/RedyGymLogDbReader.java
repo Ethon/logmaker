@@ -72,10 +72,10 @@ public class RedyGymLogDbReader implements LogReader {
 						final String dateString = set.getDate().split("\\.")[0];
 						final LocalDate date = LocalDate.parse(dateString, dtf);
 						final LocalTime time = LocalTime.parse(dateString, dtf);
-						final int timeDone = set.getTime();
-						final int reps = set.getRepeats();
+						final int timeDone = set.getTime() > 0 ? set.getTime() : 0;
+						final int reps = set.getRepeats() > 0 ? set.getRepeats() : 0;
 						final double weight = set.getWeightGrams() > 0 ? set.getWeightGrams() * 1.0 / 1000 : 0.0;
-						final int distance = set.getDistance();
+						final int distance = set.getDistance() > 0 ? set.getDistance() : 0;
 						final Exercise exercise = new Exercise(exerciseDo.getName(), convertType(exerciseDo));
 
 						Workout wo = workouts.get(date);
