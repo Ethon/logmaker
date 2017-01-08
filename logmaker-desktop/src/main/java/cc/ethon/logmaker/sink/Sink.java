@@ -1,4 +1,4 @@
-package cc.ethon.logmaker.gen;
+package cc.ethon.logmaker.sink;
 
 import java.io.OutputStream;
 

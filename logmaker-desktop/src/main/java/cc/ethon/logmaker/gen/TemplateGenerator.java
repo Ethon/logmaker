@@ -9,6 +9,7 @@ import java.util.List;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.MaxEstimator;
 import cc.ethon.logmaker.gen.model.WorkoutLogModel;
+import cc.ethon.logmaker.sink.Sink;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;

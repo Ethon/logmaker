@@ -25,10 +25,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.WendlerFormula;
-import cc.ethon.logmaker.gen.ClipboardSink;
 import cc.ethon.logmaker.gen.Generator;
 import cc.ethon.logmaker.gui.gen.GeneratorController;
 import cc.ethon.logmaker.gui.reader.LogReaderController;
+import cc.ethon.logmaker.sink.ClipboardSink;
 
 public class MainWindow extends VBox {
 

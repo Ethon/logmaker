@@ -2,6 +2,7 @@ package cc.ethon.logmaker.gen;
 
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.MaxEstimator;
+import cc.ethon.logmaker.sink.Sink;
 
 public abstract class Generator {
 

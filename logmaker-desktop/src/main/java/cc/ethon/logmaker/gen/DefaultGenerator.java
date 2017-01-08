@@ -11,6 +11,7 @@ import cc.ethon.logmaker.Workout;
 import cc.ethon.logmaker.WorkoutExercise;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.MaxEstimator;
+import cc.ethon.logmaker.sink.Sink;
 
 @Deprecated
 // Deprecated 2017-01-06
