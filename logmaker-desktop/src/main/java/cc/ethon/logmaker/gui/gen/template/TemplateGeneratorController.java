@@ -15,8 +15,12 @@ public class TemplateGeneratorController extends GeneratorController {
 	private final TemplateGeneratorModel model;
 
 	public TemplateGeneratorController(Settings settings) throws IOException {
-		generator = new TemplateGenerator(settings.getTemplatesDir());
 		model = new TemplateGeneratorModel(settings);
+		generator = new TemplateGenerator(settings.getTemplatesDir());
+		if (model.getSelectedTemplate().get() != null) {
+			generator.selectTemplate(model.getSelectedTemplate().get());
+		}
+
 		model.getAvailableTemplates().addAll(generator.getAvailableTemplates());
 		model.getSelectedTemplate().addListener((obs, o, n) -> generator.selectTemplate(n));
 	}
