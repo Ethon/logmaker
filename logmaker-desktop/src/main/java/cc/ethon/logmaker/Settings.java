@@ -13,8 +13,6 @@ public class Settings {
 	private static final String KEY_SELECTEDTEMPLATE = "selectedTemplate";
 	private static final String KEY_SELECTEDLOGREADER = "selectedLogReader";
 	private static final String KEY_CLOSEAPPLICATION = "closeApplication";
-	private static final String KEY_DELETEEXPORTFILE = "deleteExportFile";
-	private static final String KEY_EXPORTFILE = "exportFile";
 
 	private static final String TEMPLATES_DEFAULT_DIRECTORY = "templates/";
 	private static final String SETTINGS_FILENAME = "logmaker-settings.xml";
@@ -22,8 +20,6 @@ public class Settings {
 	private static Settings instance;
 
 	private Properties properties;
-	private File exportFile;
-	private Boolean deleteExportFile;
 	private Boolean closeApplication;
 	private Integer selectedLogReader;
 	private String selectedTemplate;
@@ -59,34 +55,12 @@ public class Settings {
 		saveToFile();
 	}
 
-	public File getExportFile() {
-		if (exportFile == null) {
-			final String filename = properties.getProperty(KEY_EXPORTFILE);
-			if (filename != null) {
-				exportFile = new File(filename);
-			}
-		}
-		return exportFile;
+	public String getSettingByKey(String key) {
+		return properties.getProperty(key);
 	}
 
-	public void setExportFile(File exportFile) {
-		this.exportFile = exportFile;
-		properties.setProperty(KEY_EXPORTFILE, exportFile.getAbsolutePath());
-	}
-
-	public Boolean getDeleteExportFile() {
-		if (deleteExportFile == null) {
-			deleteExportFile = "true".equals(properties.getProperty(KEY_DELETEEXPORTFILE));
-			if (!properties.contains(KEY_DELETEEXPORTFILE)) {
-				properties.setProperty(KEY_DELETEEXPORTFILE, deleteExportFile.toString());
-			}
-		}
-		return deleteExportFile;
-	}
-
-	public void setDeleteExportFile(Boolean deleteExportFile) {
-		this.deleteExportFile = deleteExportFile;
-		properties.setProperty(KEY_DELETEEXPORTFILE, deleteExportFile.toString());
+	public void setSettingByKey(String key, String value) {
+		properties.setProperty(key, value);
 	}
 
 	public Boolean getCloseApplication() {
