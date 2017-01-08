@@ -22,7 +22,7 @@ public class WendlerFormula implements MaxEstimator {
 
 	@Override
 	public String toString() {
-		return WendlerFormula.class.getSimpleName();
+		return getName();
 	}
 
 }

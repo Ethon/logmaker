@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import cc.ethon.logmaker.WorkoutLog;
-import cc.ethon.logmaker.formula.WendlerFormula;
+import cc.ethon.logmaker.formula.MaxEstimator;
 import cc.ethon.logmaker.gen.Generator;
 import cc.ethon.logmaker.gui.gen.GeneratorController;
 import cc.ethon.logmaker.gui.reader.LogReaderController;
@@ -39,6 +39,7 @@ public class MainWindow extends VBox {
 	private ComboBox<LogReaderController> selectedLogReaderComboBox;
 	private ComboBox<GeneratorController> selectedGeneratorComboBox;
 	private ComboBox<SinkController> selectedSinkComboBox;
+	private ComboBox<MaxEstimator> selectedFormulaComboBox;
 
 	private void createReaderSelection() throws IOException {
 		final Label label = new Label("Select the workoutlog reader");
@@ -112,6 +113,22 @@ public class MainWindow extends VBox {
 		getChildren().add(sinkPart);
 	}
 
+	private void createFormulaSelection() {
+		final Label label = new Label("Select a formula to estimate the 1RM:");
+		HBox.setMargin(label, new Insets(0, 10, 0, 0));
+
+		selectedFormulaComboBox = new ComboBox<MaxEstimator>();
+		selectedFormulaComboBox.setItems(model.getFormulas());
+		selectedFormulaComboBox.getSelectionModel().select(model.getSelectedFormula().get());
+		model.getSelectedFormula().bind(selectedFormulaComboBox.getSelectionModel().selectedIndexProperty());
+
+		final HBox sinkPart = new HBox(label, selectedFormulaComboBox);
+		sinkPart.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+		VBox.setMargin(sinkPart, new Insets(0, 10, 10, 10));
+		sinkPart.setPadding(new Insets(10));
+		getChildren().add(sinkPart);
+	}
+
 	private void createOptionsRow() {
 		final CheckBox closeApplication = new CheckBox("Close logmaker after generation");
 		closeApplication.setSelected(model.getCloseApplication().get());
@@ -138,7 +155,9 @@ public class MainWindow extends VBox {
 					final SinkController sinkController = selectedSinkComboBox.getSelectionModel().getSelectedItem();
 					final Sink sink = sinkController.createSink();
 
-					generator.generate(sink, log, new WendlerFormula(), 1);
+					final MaxEstimator formula = selectedFormulaComboBox.getSelectionModel().getSelectedItem();
+
+					generator.generate(sink, log, formula, 1);
 
 					readerController.postProcess();
 					if (model.getCloseApplication().get()) {
@@ -161,6 +180,7 @@ public class MainWindow extends VBox {
 		createReaderSelection();
 		createGeneratorSelection();
 		createSinkSelection();
+		createFormulaSelection();
 		createOptionsRow();
 		createGenerateButton();
 	}

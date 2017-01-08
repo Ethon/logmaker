@@ -7,6 +7,15 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import cc.ethon.logmaker.Settings;
+import cc.ethon.logmaker.formula.BrzykiFormula;
+import cc.ethon.logmaker.formula.EpleyFormula;
+import cc.ethon.logmaker.formula.LombardiFormula;
+import cc.ethon.logmaker.formula.MaxEstimator;
+import cc.ethon.logmaker.formula.MayhewEtAlFormula;
+import cc.ethon.logmaker.formula.McGlothinFormula;
+import cc.ethon.logmaker.formula.OConnerEtAlFormula;
+import cc.ethon.logmaker.formula.WathanFormula;
+import cc.ethon.logmaker.formula.WendlerFormula;
 import cc.ethon.logmaker.gui.gen.GeneratorController;
 import cc.ethon.logmaker.gui.gen.template.TemplateGeneratorController;
 import cc.ethon.logmaker.gui.reader.LogReaderController;
@@ -21,14 +30,17 @@ public class MainWindowModel {
 	private final static String KEY_SELECTEDLOGREADER = MainWindowModel.class.getSimpleName() + ".selectedLogReader";
 	private final static String KEY_SELECTEDGENERATOR = MainWindowModel.class.getSimpleName() + ".selectedGenerator";
 	private final static String KEY_SELECTEDSINK = MainWindowModel.class.getSimpleName() + ".selectedSink";
+	private final static String KEY_SELECTEDFORMULA = MainWindowModel.class.getSimpleName() + ".selectedFormula";
 
 	private final BooleanProperty closeApplication;
 	private final IntegerProperty selectedLogReader;
 	private final IntegerProperty selectedGenerator;
 	private final IntegerProperty selectedSink;
+	private final IntegerProperty selectedFormula;
 	private final ObservableList<LogReaderController> logReaders;
 	private final ObservableList<GeneratorController> generators;
 	private final ObservableList<SinkController> sinks;
+	private final ObservableList<MaxEstimator> formulas;
 
 	public MainWindowModel(Settings settings) throws Exception {
 
@@ -44,6 +56,9 @@ public class MainWindowModel {
 		selectedSink = new SimpleIntegerProperty(settings.getInt(KEY_SELECTEDSINK, 0));
 		selectedSink.addListener((obs, o, n) -> settings.setInt(KEY_SELECTEDSINK, n.intValue()));
 
+		selectedFormula = new SimpleIntegerProperty(settings.getInt(KEY_SELECTEDFORMULA, 0));
+		selectedFormula.addListener((obs, o, n) -> settings.setInt(KEY_SELECTEDFORMULA, n.intValue()));
+
 		// Changing the order will cause setting to be invalid!
 		logReaders = FXCollections.observableArrayList( //
 				new RedyGymLogCsvReaderController(Settings.getInstance()), //
@@ -56,6 +71,17 @@ public class MainWindowModel {
 		// Changing the order will cause setting to be invalid!
 		sinks = FXCollections.observableArrayList( //
 				new ClipboardSinkController());
+
+		// Changing the order will cause setting to be invalid!
+		formulas = FXCollections.observableArrayList( //
+				new WendlerFormula(), //
+				new EpleyFormula(), //
+				new BrzykiFormula(), //
+				new McGlothinFormula(), //
+				new LombardiFormula(), //
+				new MayhewEtAlFormula(), //
+				new OConnerEtAlFormula(), //
+				new WathanFormula());
 	}
 
 	public BooleanProperty getCloseApplication() {
@@ -74,6 +100,10 @@ public class MainWindowModel {
 		return selectedSink;
 	}
 
+	public IntegerProperty getSelectedFormula() {
+		return selectedFormula;
+	}
+
 	public ObservableList<LogReaderController> getLogReaders() {
 		return logReaders;
 	}
@@ -84,6 +114,10 @@ public class MainWindowModel {
 
 	public ObservableList<SinkController> getSinks() {
 		return sinks;
+	}
+
+	public ObservableList<MaxEstimator> getFormulas() {
+		return formulas;
 	}
 
 }
