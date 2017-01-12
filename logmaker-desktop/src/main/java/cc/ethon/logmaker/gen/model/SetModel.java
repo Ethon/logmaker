@@ -2,6 +2,7 @@ package cc.ethon.logmaker.gen.model;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -35,13 +36,15 @@ public class SetModel {
 		return set.getReps();
 	}
 
-	public String getTimeDone() {
+	public Date getTimeDone() {
 		int seconds = set.getTimeDone();
 		final int hours = seconds / 3600;
 		seconds -= hours * 3600;
 		final int minutes = seconds / 60;
 		seconds -= minutes * 60;
-		return String.format("%dh %dmin %ds", hours, minutes, seconds);
+		final LocalTime lt = LocalTime.of(hours, minutes, seconds);
+		final Instant instant = lt.atDate(LocalDate.of(2000, 1, 1)).atZone(ZoneId.systemDefault()).toInstant();
+		return Date.from(instant);
 	}
 
 	public String getDistance() {

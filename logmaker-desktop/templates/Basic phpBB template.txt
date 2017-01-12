@@ -10,13 +10,13 @@
 [b][u]${exercise.name}:[/u][/b]
 		<#list exercise.sets as set>
 			<#if exercise.timeOnly>
-[${set.time?string["HH:mm"]}] ${set.timeDone}
+[${set.time?string["HH:mm"]}] ${set.timeDone?string["H'h' m'min' s'sec'"]}
 			<#elseif exercise.repsOnly>
 [${set.time?string["HH:mm"]}] ${set.repetitions}*
 			<#elseif exercise.weightForTime>
-[${set.time?string["HH:mm"]}] ${set.weight.format()} : ${set.timeDone}
+[${set.time?string["HH:mm"]}] ${set.weight.format()} : ${set.timeDone?string["H'h' m'min' s'sec'"]}
 			<#elseif exercise.distanceForTime>
-[${set.time?string["HH:mm"]}] ${set.distance} : ${set.timeDone}
+[${set.time?string["HH:mm"]}] ${set.distance} : ${set.timeDone?string["H'h' m'min' s'sec'"]}
 			<#elseif exercise.weightForReps>
 				<#if !set.noWeight>
 [${set.time?string["HH:mm"]}] ${set.weight.format()} x ${set.repetitions} (${ermFormulaName} ERM: <#if set.ermRecord>[color=#008000]${set.erm.format()}[/color]<#else>${set.erm.format()}</#if>)
