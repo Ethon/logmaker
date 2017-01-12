@@ -3,10 +3,8 @@ package cc.ethon.logmaker.gen.model;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import cc.ethon.logmaker.Set;
@@ -14,8 +12,6 @@ import cc.ethon.logmaker.Workout;
 import cc.ethon.logmaker.formula.MaxEstimator;
 
 public class WorkoutModel {
-
-	private static final DateTimeFormatter DURATION_FORMATTER = DateTimeFormatter.ofPattern("H'h' m'min'", Locale.getDefault());
 
 	private final Workout workout;
 	private final MaxEstimator maxEstimator;
