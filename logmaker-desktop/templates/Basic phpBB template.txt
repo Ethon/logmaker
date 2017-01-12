@@ -2,7 +2,7 @@
 [size=150][b][u]${workout.date?date?string.full} - ${workout.name!"<>"}[/u][/b][/size]
 
 [b][u]Stats:[/u][/b]
-[i]Duration:[/i] ${workout.duration}
+[i]Duration:[/i] ${workout.duration?string["H'h' m'min'"]}
 [i]Weight lifted:[/i] ${workout.weightLifted.format()}
 [i]Sets:[/i] ${workout.setCount}
 
