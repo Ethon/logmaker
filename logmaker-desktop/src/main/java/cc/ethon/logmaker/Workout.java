@@ -85,10 +85,12 @@ public class Workout {
 		}
 		final LocalTime first = getFirstExercise().getTemporallyFirstSet().getTime();
 		final LocalTime last = getLastExercise().getTemporallyLastSet().getTime();
-		int min = (int) first.until(last, ChronoUnit.MINUTES);
+		int sec = (int) first.until(last, ChronoUnit.SECONDS);
+		int min = sec / 60;
+		sec %= 60;
 		final int hours = min / 60;
 		min %= 60;
-		return LocalTime.of(hours, min);
+		return LocalTime.of(hours, min, sec);
 	}
 
 	public int getSetCount() {
