@@ -1,6 +1,8 @@
 package cc.ethon.logmaker.gen.model;
 
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -11,7 +13,6 @@ import cc.ethon.logmaker.formula.MaxEstimator;
 
 public class WorkoutModel {
 
-	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("E, d.L.u", Locale.getDefault());
 	private static final DateTimeFormatter DURATION_FORMATTER = DateTimeFormatter.ofPattern("H'h' m'min'", Locale.getDefault());
 
 	private final Workout workout;
@@ -25,8 +26,8 @@ public class WorkoutModel {
 		this.workoutLog = workoutLog;
 	}
 
-	public String getDate() {
-		return workout.getDate().format(DATE_FORMATTER);
+	public Date getDate() {
+		return Date.from(workout.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
 	}
 
 	public String getName() {

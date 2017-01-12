@@ -1,5 +1,5 @@
 <#list workouts as workout>
-[size=150][b][u]${workout.date} - ${workout.name!"<>"}[/u][/b][/size]
+[size=150][b][u]${workout.date?date?string.full} - ${workout.name!"<>"}[/u][/b][/size]
 
 [b][u]Stats:[/u][/b]
 [i]Duration:[/i] ${workout.duration}
