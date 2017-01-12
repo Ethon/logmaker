@@ -1,14 +1,15 @@
 package cc.ethon.logmaker.gen.model;
 
-import java.text.DecimalFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import cc.ethon.logmaker.Exercise.ExerciseType;
 import cc.ethon.logmaker.Set;
 import cc.ethon.logmaker.formula.MaxEstimator;
 
 public class SetModel {
-
-	private static final DecimalFormat WEIGHT_FORMATTER = new DecimalFormat("0.##");
 
 	private final Set set;
 	private final MaxEstimator maxEstimator;
@@ -21,12 +22,13 @@ public class SetModel {
 		this.workoutExercise = workoutExercise;
 	}
 
-	public String getTime() {
-		return String.format("%02d:%02d", set.getTime().getHour(), set.getTime().getMinute());
+	public Date getTime() {
+		final Instant instant = set.getTime().atDate(LocalDate.of(2000, 1, 1)).atZone(ZoneId.systemDefault()).toInstant();
+		return Date.from(instant);
 	}
 
-	public String getWeight() {
-		return WEIGHT_FORMATTER.format(set.getWeight());
+	public WeightModel getWeight() {
+		return new WeightModel((int) (set.getWeight() * 1000));
 	}
 
 	public int getRepetitions() {
@@ -49,8 +51,8 @@ public class SetModel {
 		return String.format("%dkm %dm", kiloMeters, meters);
 	}
 
-	public String getErm() {
-		return WEIGHT_FORMATTER.format(maxEstimator.estimate(set));
+	public WeightModel getErm() {
+		return new WeightModel((int) (maxEstimator.estimate(set) * 1000));
 	}
 
 	public boolean isNoWeight() {

@@ -1,6 +1,5 @@
 package cc.ethon.logmaker.gen.model;
 
-import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -14,7 +13,6 @@ public class WorkoutModel {
 
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("E, d.L.u", Locale.getDefault());
 	private static final DateTimeFormatter DURATION_FORMATTER = DateTimeFormatter.ofPattern("H'h' m'min'", Locale.getDefault());
-	private static final DecimalFormat WEIGHT_FORMATTER = new DecimalFormat("0.##");
 
 	private final Workout workout;
 	private final MaxEstimator maxEstimator;
@@ -39,8 +37,8 @@ public class WorkoutModel {
 		return workout.getDuration().format(DURATION_FORMATTER);
 	}
 
-	public String getWeightLifted() {
-		return WEIGHT_FORMATTER.format(workout.getWeightLifted());
+	public WeightModel getWeightLifted() {
+		return new WeightModel((int) (workout.getWeightLifted() * 1000));
 	}
 
 	public int getSetCount() {
