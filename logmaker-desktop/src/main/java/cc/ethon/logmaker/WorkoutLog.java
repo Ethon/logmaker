@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalDouble;
+import java.util.OptionalInt;
 
 import cc.ethon.logmaker.formula.MaxEstimator;
 
@@ -31,9 +31,9 @@ public class WorkoutLog {
 				.max((s1, s2) -> estimator.compareSets(s1, s2));
 	}
 
-	public OptionalDouble getExerciseErmRecord(Exercise exercise, List<Set> except, MaxEstimator estimator) {
+	public OptionalInt getExerciseErmRecord(Exercise exercise, List<Set> except, MaxEstimator estimator) {
 		final Optional<Set> bestSet = getBestSetByExercise(exercise, except, estimator);
-		return bestSet.isPresent() ? OptionalDouble.of(bestSet.get().estimateErm(estimator)) : OptionalDouble.empty();
+		return bestSet.isPresent() ? OptionalInt.of(bestSet.get().estimateErm(estimator)) : OptionalInt.empty();
 	}
 
 	public List<Workout> getWorkouts() {

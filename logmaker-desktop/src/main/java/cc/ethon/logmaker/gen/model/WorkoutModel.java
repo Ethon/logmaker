@@ -38,7 +38,7 @@ public class WorkoutModel {
 	}
 
 	public WeightModel getWeightLifted() {
-		return new WeightModel((int) (workout.getWeightLifted() * 1000));
+		return new WeightModel(workout.getWeightLifted());
 	}
 
 	public int getSetCount() {

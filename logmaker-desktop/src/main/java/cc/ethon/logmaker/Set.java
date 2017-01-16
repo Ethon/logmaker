@@ -11,11 +11,11 @@ public class Set {
 	private final LocalTime time;
 	private final Exercise exercise;
 	private final int reps;
-	private final double weight;
+	private final int weight;
 	private final int timeDone;
 	private final int distance;
 
-	public Set(LocalDate date, LocalTime time, Exercise exercise, int reps, double weight, int timeDone, int distance) {
+	public Set(LocalDate date, LocalTime time, Exercise exercise, int reps, int weight, int timeDone, int distance) {
 		super();
 		this.date = date;
 		this.time = time;
@@ -26,8 +26,8 @@ public class Set {
 		this.distance = distance;
 	}
 
-	public double estimateErm(MaxEstimator estimator) {
-		return estimator.estimate(this);
+	public int estimateErm(MaxEstimator estimator) {
+		return (int) estimator.estimate(this);
 	}
 
 	public LocalDate getDate() {
@@ -46,11 +46,11 @@ public class Set {
 		return time;
 	}
 
-	public double getWeight() {
+	public int getWeight() {
 		return weight;
 	}
 
-	public double getWeightLifted() {
+	public int getWeightLifted() {
 		return getWeight() * getReps();
 	}
 

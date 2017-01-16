@@ -83,7 +83,7 @@ public class RedyGymLogCsvReader implements LogReader {
 			final int reps = hasReps ? Integer.valueOf(parts[2]) : 0;
 
 			final boolean hasWeight = !parts[3].isEmpty();
-			final double weight = hasWeight ? nf.parse(parts[3]).doubleValue() : 0.0;
+			final int weight = hasWeight ? (int) (nf.parse(parts[3]).doubleValue() * 1000) : 0;
 
 			final boolean hasTimeDone = !parts[4].isEmpty();
 			int timeDone = 0;

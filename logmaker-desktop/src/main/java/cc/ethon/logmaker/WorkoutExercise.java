@@ -45,8 +45,8 @@ public class WorkoutExercise {
 		return sets.stream().max((s1, s2) -> Double.valueOf(maxEstimator.estimate(s1)).compareTo(maxEstimator.estimate(s2))).get();
 	}
 
-	public double getWeightLifted() {
-		return sets.stream().mapToDouble(set -> set.getWeightLifted()).sum();
+	public int getWeightLifted() {
+		return sets.stream().mapToInt(set -> set.getWeightLifted()).sum();
 	}
 
 	public void sortSets() {

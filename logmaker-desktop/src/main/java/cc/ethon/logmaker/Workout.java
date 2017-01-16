@@ -101,8 +101,8 @@ public class Workout {
 		return exercises.get(exercise);
 	}
 
-	public double getWeightLifted() {
-		return exercises.values().stream().mapToDouble(exercise -> exercise.getWeightLifted()).sum();
+	public int getWeightLifted() {
+		return exercises.values().stream().mapToInt(exercise -> exercise.getWeightLifted()).sum();
 	}
 
 	public Optional<String> getName() {

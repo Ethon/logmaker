@@ -4,7 +4,7 @@ import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.OptionalDouble;
+import java.util.OptionalInt;
 
 import cc.ethon.logmaker.Set;
 import cc.ethon.logmaker.Workout;
@@ -44,23 +44,28 @@ public class DefaultGenerator extends Generator {
 			for (final Set set : exercise.getSets()) {
 				if (set.getWeight() > 0.0) {
 					String wendlerExtraInfo = "";
-					final OptionalDouble record = log.getExerciseErmRecord(set.getExercise(), wo.getExercise(set.getExercise()).getSets(), maxEstimator);
+					final OptionalInt record = log.getExerciseErmRecord(set.getExercise(), wo.getExercise(set.getExercise()).getSets(), maxEstimator);
 					if (record.isPresent()) {
-						final double delta = record.getAsDouble() - set.estimateErm(maxEstimator);
+						final double recordKg = 1.0 * record.getAsInt() / 1000.0;
+						final double delta = 1.0 * (record.getAsInt() - set.estimateErm(maxEstimator)) / 1000.0;
 						if (delta > 0) {
-							wendlerExtraInfo = String.format(" -> %3skg below record @ %3skg", df.format(delta), df.format(record.getAsDouble()));
+							wendlerExtraInfo = String.format(" -> %3skg below record @ %3skg", df.format(delta), df.format(recordKg));
 						} else if (delta == 0.0) {
 							wendlerExtraInfo = " [color=#008000]-> matched record[/color]";
 						} else {
 							wendlerExtraInfo = String.format(" [color=#008000]-> %3skg above old record @ %3skg[/color]", df.format(Math.abs(delta)),
-									df.format(record.getAsDouble()));
+									df.format(recordKg));
 						}
 					}
 
-					out.printf("%7s %3skg x %2d (Wendler ERM: %3skg%s)\n", set.getTime().format(timeFormatter), df.format(set.getWeight()), set.getReps(),
-							df.format(set.estimateErm(maxEstimator)), wendlerExtraInfo);
+					final double weightKg = 1.0 * set.getWeight() / 1000.0;
+					final double ermKg = 1.0 * set.estimateErm(maxEstimator) / 1000.0;
+
+					out.printf("%7s %3skg x %2d (Wendler ERM: %3skg%s)\n", set.getTime().format(timeFormatter), df.format(weightKg), set.getReps(),
+							df.format(ermKg), wendlerExtraInfo);
 				} else {
-					out.printf("%7s %3skg x %2d\n", set.getTime().format(timeFormatter), df.format(Math.abs(set.getWeight())), set.getReps());
+					final double weightKg = 1.0 * set.getWeight() / 1000.0;
+					out.printf("%7s %3skg x %2d\n", set.getTime().format(timeFormatter), df.format(Math.abs(weightKg)), set.getReps());
 				}
 			}
 			out.println();

@@ -29,7 +29,7 @@ public class SetModel {
 	}
 
 	public WeightModel getWeight() {
-		return new WeightModel((int) (set.getWeight() * 1000));
+		return new WeightModel(set.getWeight());
 	}
 
 	public int getRepetitions() {
@@ -55,7 +55,7 @@ public class SetModel {
 	}
 
 	public WeightModel getErm() {
-		return new WeightModel((int) (maxEstimator.estimate(set) * 1000));
+		return new WeightModel(set.estimateErm(maxEstimator));
 	}
 
 	public boolean isNoWeight() {
@@ -63,7 +63,7 @@ public class SetModel {
 		if (type != ExerciseType.WeightReps && type != ExerciseType.WeightTime) {
 			return true;
 		}
-		return set.getWeight() == 0.0;
+		return set.getWeight() == 0;
 	}
 
 	public boolean isErmRecord() {
