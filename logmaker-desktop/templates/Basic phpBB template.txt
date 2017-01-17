@@ -2,29 +2,37 @@
 [size=150][b][u]${workout.date?date?string.full} - ${workout.name!"<>"}[/u][/b][/size]
 
 [b][u]Stats:[/u][/b]
-[i]Duration:[/i] ${workout.duration?string["H'h' m'min'"]}
+[i]Duration:[/i] ${formatSeconds(workout.duration.seconds, "H'h' m'min'")}
 [i]Weight lifted:[/i] ${workout.weightLifted.format()}
 [i]Sets:[/i] ${workout.setCount}
 
 	<#list workout.exercises as exercise>
 [b][u]${exercise.name}:[/u][/b]
-		<#list exercise.sets as set>
-			<#if exercise.timeOnly>
+		<#if exercise.timeOnly>
+			<#list exercise.sets as set>
 [${set.time?string["HH:mm"]}] ${set.timeDone?string["H'h' m'min' s'sec'"]}
-			<#elseif exercise.repsOnly>
+			</#list>
+		<#elseif exercise.repsOnly>
+			<#list exercise.sets as set>
 [${set.time?string["HH:mm"]}] ${set.repetitions}*
-			<#elseif exercise.weightForTime>
+			</#list>
+		<#elseif exercise.weightForTime>
+			<#list exercise.sets as set>
 [${set.time?string["HH:mm"]}] ${set.weight.format()} : ${set.timeDone?string["H'h' m'min' s'sec'"]}
-			<#elseif exercise.distanceForTime>
+			</#list>
+		<#elseif exercise.distanceForTime>
+			<#list exercise.sets as set>
 [${set.time?string["HH:mm"]}] ${set.distance} : ${set.timeDone?string["H'h' m'min' s'sec'"]}
-			<#elseif exercise.weightForReps>
+			</#list>
+		<#elseif exercise.weightForReps>
+			<#list exercise.sets as set>
 				<#if !set.noWeight>
 [${set.time?string["HH:mm"]}] ${set.weight.format()} x ${set.repetitions} (${ermFormulaName} ERM: <#if set.ermRecord>[color=#008000]${set.erm.format()}[/color]<#else>${set.erm.format()}</#if>)
 				<#else>
 [${set.time?string["HH:mm"]}] ${set.repetitions}*
 				</#if>
-			</#if>
-		</#list>
-
+			</#list>
+		</#if>
+		
 	</#list>
 </#list>

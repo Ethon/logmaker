@@ -2,6 +2,7 @@ package cc.ethon.logmaker.gen;
 
 import java.io.PrintStream;
 import java.text.DecimalFormat;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.OptionalInt;
@@ -33,7 +34,7 @@ public class DefaultGenerator extends Generator {
 
 		out.println();
 		out.println("[b][u]Stats:[/u][/b]");
-		out.printf("[i]Duration:[/i] %s\n", wo.getDuration().format(durationFormatter));
+		out.printf("[i]Duration:[/i] %s\n", durationFormatter.format(LocalTime.ofSecondOfDay(wo.getDuration().getSeconds())));
 		out.printf("[i]Weight lifted:[/i] %skg\n", df.format(wo.getWeightLifted()));
 		out.printf("[i]Sets:[/i] %d\n", wo.getSetCount());
 		out.println();

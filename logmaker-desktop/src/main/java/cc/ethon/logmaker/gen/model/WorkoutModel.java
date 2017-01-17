@@ -1,7 +1,6 @@
 package cc.ethon.logmaker.gen.model;
 
-import java.time.Instant;
-import java.time.LocalDate;
+import java.time.Duration;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -32,9 +31,8 @@ public class WorkoutModel {
 		return workout.getName().isPresent() ? workout.getName().get() : null;
 	}
 
-	public Date getDuration() {
-		final Instant instant = workout.getDuration().atDate(LocalDate.of(2000, 1, 1)).atZone(ZoneId.systemDefault()).toInstant();
-		return Date.from(instant);
+	public Duration getDuration() {
+		return workout.getDuration();
 	}
 
 	public WeightModel getWeightLifted() {

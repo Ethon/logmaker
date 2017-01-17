@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.api.freemarker.java8.Java8ObjectWrapper;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.MaxEstimator;
 import cc.ethon.logmaker.gen.model.WorkoutLogModel;
@@ -27,6 +28,8 @@ public class TemplateGenerator extends Generator {
 		// 100%
 		// backward-compatible. See the Configuration JavaDoc for details.
 		final Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
+
+		configuration.setObjectWrapper(new Java8ObjectWrapper(Configuration.VERSION_2_3_23));
 
 		// Specify the source where the template files come from. Here I set a
 		// plain directory for it, but non-file-system sources are possible too:

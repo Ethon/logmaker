@@ -1,5 +1,6 @@
 package cc.ethon.logmaker;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -79,18 +80,14 @@ public class Workout {
 		return date;
 	}
 
-	public LocalTime getDuration() {
+	public Duration getDuration() {
 		if (getExercises().isEmpty()) {
-			return LocalTime.of(0, 0);
+			return Duration.ofSeconds(0);
 		}
 		final LocalTime first = getFirstExercise().getTemporallyFirstSet().getTime();
 		final LocalTime last = getLastExercise().getTemporallyLastSet().getTime();
-		int sec = (int) first.until(last, ChronoUnit.SECONDS);
-		int min = sec / 60;
-		sec %= 60;
-		final int hours = min / 60;
-		min %= 60;
-		return LocalTime.of(hours, min, sec);
+		final int seconds = (int) first.until(last, ChronoUnit.SECONDS);
+		return Duration.ofSeconds(seconds);
 	}
 
 	public int getSetCount() {
