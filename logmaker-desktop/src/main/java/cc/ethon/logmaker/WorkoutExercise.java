@@ -1,5 +1,6 @@
 package cc.ethon.logmaker;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,8 +46,16 @@ public class WorkoutExercise {
 		return sets.stream().max((s1, s2) -> Double.valueOf(maxEstimator.estimate(s1)).compareTo(maxEstimator.estimate(s2))).get();
 	}
 
-	public int getWeightLifted() {
+	public int getTotalWeightLifted() {
 		return sets.stream().mapToInt(set -> set.getWeightLifted()).sum();
+	}
+
+	public int getTotalReps() {
+		return sets.stream().mapToInt(set -> set.getReps()).sum();
+	}
+
+	public Duration getDuration() {
+		return Duration.between(getTemporallyFirstSet().getTime(), getTemporallyLastSet().getTime());
 	}
 
 	public void sortSets() {

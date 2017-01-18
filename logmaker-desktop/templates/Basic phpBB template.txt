@@ -32,6 +32,7 @@
 [${set.time?string["HH:mm"]}] ${set.repetitions}*
 				</#if>
 			</#list>
+(Total: ${exercise.totalWeight.formatWeight()} and ${exercise.totalReps} reps in ${formatSeconds(exercise.duration.seconds, "H'h' m'min'")})
 		</#if>
 		
 	</#list>

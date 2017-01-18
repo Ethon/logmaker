@@ -99,7 +99,7 @@ public class Workout {
 	}
 
 	public int getWeightLifted() {
-		return exercises.values().stream().mapToInt(exercise -> exercise.getWeightLifted()).sum();
+		return exercises.values().stream().mapToInt(exercise -> exercise.getTotalWeightLifted()).sum();
 	}
 
 	public Optional<String> getName() {

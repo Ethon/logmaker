@@ -1,5 +1,6 @@
 package cc.ethon.logmaker.gen.model;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,18 @@ public class WorkoutExerciseModel {
 
 	public boolean isDistanceForTime() {
 		return exercise.getExercise().getType() == ExerciseType.DistanceTime;
+	}
+
+	public WeightModel getTotalWeight() {
+		return new WeightModel(exercise.getTotalWeightLifted());
+	}
+
+	public int getTotalReps() {
+		return exercise.getTotalReps();
+	}
+
+	public Duration getDuration() {
+		return exercise.getDuration();
 	}
 
 	@Override
