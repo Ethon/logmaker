@@ -18,6 +18,7 @@
 			<#list exercise.sets as set>
 [${set.time?string["HH:mm"]}] ${set.repetitions}*
 			</#list>
+(Total: ${exercise.totalReps} reps in ${formatSeconds(exercise.duration.seconds, "H'h' m'min'")})
 		<#elseif exercise.weightForTime>
 			<#list exercise.sets as set>
 [${set.time?string["HH:mm"]}] ${set.weight.formatWeight()} : ${set.timeDone?string["H'h' m'min' s'sec'"]}
