@@ -54,8 +54,17 @@ public class WorkoutExercise {
 		return sets.stream().mapToInt(set -> set.getReps()).sum();
 	}
 
+	public int getTotalTimeDone() {
+		return sets.stream().mapToInt(set -> set.getTimeDone()).sum();
+	}
+
 	public Duration getDuration() {
-		return Duration.between(getTemporallyFirstSet().getTime(), getTemporallyLastSet().getTime());
+		Duration duration = Duration.between(getTemporallyFirstSet().getTime(), getTemporallyLastSet().getTime());
+		final Set firstSet = getTemporallyFirstSet();
+		if (firstSet.getTimeDone() > 0) {
+			duration = duration.plusSeconds(firstSet.getTimeDone());
+		}
+		return duration;
 	}
 
 	public void sortSets() {

@@ -1,6 +1,11 @@
 package cc.ethon.logmaker.gen.model;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +65,17 @@ public class WorkoutExerciseModel {
 
 	public int getTotalReps() {
 		return exercise.getTotalReps();
+	}
+
+	public Date getTotalTimeDone() {
+		int seconds = exercise.getTotalTimeDone();
+		final int hours = seconds / 3600;
+		seconds -= hours * 3600;
+		final int minutes = seconds / 60;
+		seconds -= minutes * 60;
+		final LocalTime lt = LocalTime.of(hours, minutes, seconds);
+		final Instant instant = lt.atDate(LocalDate.of(2000, 1, 1)).atZone(ZoneId.systemDefault()).toInstant();
+		return Date.from(instant);
 	}
 
 	public Duration getDuration() {
