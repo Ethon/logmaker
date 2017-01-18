@@ -84,9 +84,13 @@ public class Workout {
 		if (getExercises().isEmpty()) {
 			return Duration.ofSeconds(0);
 		}
-		final LocalTime first = getFirstExercise().getTemporallyFirstSet().getTime();
+		final Set firstSet = getFirstExercise().getTemporallyFirstSet();
+		final LocalTime first = firstSet.getTime();
 		final LocalTime last = getLastExercise().getTemporallyLastSet().getTime();
-		final int seconds = (int) first.until(last, ChronoUnit.SECONDS);
+		int seconds = (int) first.until(last, ChronoUnit.SECONDS);
+		if (firstSet.getTimeDone() > 0) {
+			seconds += firstSet.getTimeDone();
+		}
 		return Duration.ofSeconds(seconds);
 	}
 
