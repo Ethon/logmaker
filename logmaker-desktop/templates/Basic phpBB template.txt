@@ -3,6 +3,7 @@
 
 [b][u]Stats:[/u][/b]
 [i]Duration:[/i] ${formatSeconds(workout.duration.seconds, "H'h' m'min'")}
+[i]Time between exercises:[/i] ${formatSeconds(workout.timeBetweenExercises.seconds, "H'h' m'min'")}
 [i]Weight lifted:[/i] ${workout.weightLifted.formatWeight()}
 [i]Sets:[/i] ${workout.setCount}
 

@@ -94,6 +94,24 @@ public class Workout {
 		return Duration.ofSeconds(seconds);
 	}
 
+	public Duration getTimeBetweenExercises() {
+		if (getExercises().isEmpty()) {
+			return Duration.ofSeconds(0);
+		}
+
+		int seconds = 0;
+		WorkoutExercise lastExercise = null;
+		for (final WorkoutExercise exercise : getExercises()) {
+			if (lastExercise != null) {
+				final LocalTime last = lastExercise.getTemporallyLastSet().getTime();
+				final LocalTime first = exercise.getTemporallyFirstSet().getTime();
+				seconds += last.until(first, ChronoUnit.SECONDS);
+			}
+			lastExercise = exercise;
+		}
+		return Duration.ofSeconds(seconds);
+	}
+
 	public int getSetCount() {
 		return getExercises().stream().mapToInt(ex -> ex.getSets().size()).sum();
 	}

@@ -35,6 +35,10 @@ public class WorkoutModel {
 		return workout.getDuration();
 	}
 
+	public Duration getTimeBetweenExercises() {
+		return workout.getTimeBetweenExercises();
+	}
+
 	public WeightModel getWeightLifted() {
 		return new WeightModel(workout.getWeightLifted());
 	}
