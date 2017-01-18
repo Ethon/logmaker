@@ -47,11 +47,8 @@ public class SetModel {
 		return Date.from(instant);
 	}
 
-	public String getDistance() {
-		int meters = set.getDistance();
-		final int kiloMeters = meters / 1000;
-		meters -= kiloMeters * 1000;
-		return String.format("%dkm %dm", kiloMeters, meters);
+	public DistanceModel getDistance() {
+		return new DistanceModel(set.getDistance());
 	}
 
 	public WeightModel getErm() {

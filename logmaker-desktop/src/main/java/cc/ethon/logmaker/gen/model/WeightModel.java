@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateMethodModelEx;
+import freemarker.template.TemplateModelException;
 
 public class WeightModel {
 
@@ -31,20 +32,18 @@ public class WeightModel {
 		return getGrams() - getKilograms() * GRAMS_PER_KILOGRAM;
 	}
 
-	public TemplateMethodModelEx getFormat() {
+	public TemplateMethodModelEx getFormatWeight() {
 		return (args) -> {
-			final boolean valid = args.size() <= 1;
-			if (!valid) {
-				throw new IllegalArgumentException("Wrong usage of `format([String])`");
+			try {
+				String string = !args.isEmpty() ? ((SimpleScalar) args.get(0)).getAsString() : DEFAULT_FORMAT;
+				string = string.replace("$G", String.valueOf(getGrams()));
+				string = string.replace("$g", String.valueOf(getGramsOfKilogram()));
+				string = string.replace("$kg", String.valueOf(getKilograms()));
+				string = string.replace("$KG", WEIGHT_FORMATTER.format(1.0 * getGrams() / GRAMS_PER_KILOGRAM));
+				return string;
+			} catch (final Exception e) {
+				throw new TemplateModelException("Usage: formatWeight([formatString])", e);
 			}
-
-			String string = !args.isEmpty() ? ((SimpleScalar) args.get(0)).getAsString() : DEFAULT_FORMAT;
-			string = string.replace("$G", String.valueOf(getGrams()));
-			string = string.replace("$g", String.valueOf(getGramsOfKilogram()));
-			string = string.replace("$kg", String.valueOf(getKilograms()));
-			string = string.replace("$KG", WEIGHT_FORMATTER.format(1.0 * getGrams() / GRAMS_PER_KILOGRAM));
-			return string;
 		};
 	}
-
 }
