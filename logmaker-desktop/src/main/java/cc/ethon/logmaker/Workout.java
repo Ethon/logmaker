@@ -105,7 +105,9 @@ public class Workout {
 			if (lastExercise != null) {
 				final LocalTime last = lastExercise.getTemporallyLastSet().getTime();
 				final LocalTime first = exercise.getTemporallyFirstSet().getTime();
-				seconds += last.until(first, ChronoUnit.SECONDS);
+				if (last.until(first, ChronoUnit.SECONDS) > 0) {
+					seconds += last.until(first, ChronoUnit.SECONDS);
+				}
 			}
 			lastExercise = exercise;
 		}
