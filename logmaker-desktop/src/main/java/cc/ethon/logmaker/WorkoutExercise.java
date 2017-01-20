@@ -58,6 +58,10 @@ public class WorkoutExercise {
 		return sets.stream().mapToInt(set -> set.getTimeDone()).sum();
 	}
 
+	public int getTotalDistance() {
+		return sets.stream().mapToInt(set -> set.getDistance()).sum();
+	}
+
 	public Duration getDuration() {
 		Duration duration = Duration.between(getTemporallyFirstSet().getTime(), getTemporallyLastSet().getTime());
 		final Set firstSet = getTemporallyFirstSet();

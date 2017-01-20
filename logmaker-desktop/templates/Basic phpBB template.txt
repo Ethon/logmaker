@@ -23,10 +23,12 @@
 			<#list exercise.sets as set>
 [${set.time?string["HH:mm"]}] ${set.weight.formatWeight()} : ${set.timeDone?string["H'h' m'min' s'sec'"]}
 			</#list>
+(Total: ${exercise.totalWeight.formatWeight()} and ${exercise.totalTimeDone?string["H'h' m'min' s'sec'"]} in ${formatSeconds(exercise.duration.seconds, "H'h' m'min'")})
 		<#elseif exercise.distanceForTime>
 			<#list exercise.sets as set>
 [${set.time?string["HH:mm"]}] ${set.distance.formatDistance()} : ${set.timeDone?string["H'h' m'min' s'sec'"]}
 			</#list>
+(Total: ${exercise.totalDistance.formatDistance()} and ${exercise.totalTimeDone?string["H'h' m'min' s'sec'"]} in ${formatSeconds(exercise.duration.seconds, "H'h' m'min'")})
 		<#elseif exercise.weightForReps>
 			<#list exercise.sets as set>
 				<#if !set.noWeight>

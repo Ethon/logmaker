@@ -78,6 +78,10 @@ public class WorkoutExerciseModel {
 		return Date.from(instant);
 	}
 
+	public DistanceModel getTotalDistance() {
+		return new DistanceModel(exercise.getTotalDistance());
+	}
+
 	public Duration getDuration() {
 		return exercise.getDuration();
 	}
