@@ -5,16 +5,14 @@ import java.io.File;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import cc.ethon.logmaker.Settings;
-import cc.ethon.logmaker.gui.reader.LogReaderController;
+import cc.ethon.logmaker.gui.reader.SingleFileController;
 import cc.ethon.logmaker.reader.LogReader;
 import cc.ethon.logmaker.reader.redy.csv.RedyGymLogCsvReader;
 
-public class RedyGymLogCsvReaderController extends LogReaderController {
-
-	private final RedyGymLogCsvReaderModel model;
+public class RedyGymLogCsvReaderController extends SingleFileController<RedyGymLogCsvReaderModel> {
 
 	public RedyGymLogCsvReaderController(Settings settings) {
-		model = new RedyGymLogCsvReaderModel(settings);
+		super(new RedyGymLogCsvReaderModel(settings));
 	}
 
 	@Override
@@ -25,16 +23,6 @@ public class RedyGymLogCsvReaderController extends LogReaderController {
 	@Override
 	public LogReader createReader() {
 		return new RedyGymLogCsvReader(new File(model.getFile().get()));
-	}
-
-	@Override
-	public void postProcess() {
-		if (model.getDeleteFile().get()) {
-			final File file = new File(model.getFile().get());
-			if (file.exists()) {
-				file.delete();
-			}
-		}
 	}
 
 	@Override
