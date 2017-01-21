@@ -2,11 +2,11 @@ package cc.ethon.logmaker.gui.reader;
 
 import java.io.File;
 
-public abstract class SingleFileController<M extends SingleFileReaderModel> extends LogReaderController {
+public abstract class SingleFileReaderController<M extends SingleFileReaderModel> extends LogReaderController {
 
 	protected final M model;
 
-	public SingleFileController(M model) {
+	public SingleFileReaderController(M model) {
 		this.model = model;
 	}
 
