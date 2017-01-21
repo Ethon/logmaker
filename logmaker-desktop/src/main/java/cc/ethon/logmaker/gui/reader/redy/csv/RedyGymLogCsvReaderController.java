@@ -24,13 +24,13 @@ public class RedyGymLogCsvReaderController extends LogReaderController {
 
 	@Override
 	public LogReader createReader() {
-		return new RedyGymLogCsvReader(new File(model.getExportFile().get()));
+		return new RedyGymLogCsvReader(new File(model.getFile().get()));
 	}
 
 	@Override
 	public void postProcess() {
-		if (model.getDeleteExportFile().get()) {
-			final File file = new File(model.getExportFile().get());
+		if (model.getDeleteFile().get()) {
+			final File file = new File(model.getFile().get());
 			if (file.exists()) {
 				file.delete();
 			}

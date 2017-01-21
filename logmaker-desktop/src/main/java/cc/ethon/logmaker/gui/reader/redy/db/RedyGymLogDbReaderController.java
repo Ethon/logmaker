@@ -24,7 +24,7 @@ public class RedyGymLogDbReaderController extends LogReaderController {
 
 	@Override
 	public LogReader createReader() {
-		return new RedyGymLogDbReader(new File(model.getBackupFile().get()));
+		return new RedyGymLogDbReader(new File(model.getFile().get()));
 	}
 
 	@Override
@@ -34,8 +34,8 @@ public class RedyGymLogDbReaderController extends LogReaderController {
 
 	@Override
 	public void postProcess() {
-		if (model.getDeleteBackupFile().get()) {
-			final File file = new File(model.getBackupFile().get());
+		if (model.getDeleteFile().get()) {
+			final File file = new File(model.getFile().get());
 			if (file.exists()) {
 				file.delete();
 			}

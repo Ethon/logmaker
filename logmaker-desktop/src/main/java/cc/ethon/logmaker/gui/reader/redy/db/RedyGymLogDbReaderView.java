@@ -25,7 +25,7 @@ public class RedyGymLogDbReaderView extends VBox {
 		HBox.setMargin(label, new Insets(0, 10, 10, 0));
 
 		final TextField textField = new TextField();
-		textField.textProperty().bind(model.getBackupFile());
+		textField.textProperty().bind(model.getFile());
 		HBox.setHgrow(textField, Priority.ALWAYS);
 		HBox.setMargin(textField, new Insets(0, 10, 10, 0));
 
@@ -37,7 +37,7 @@ public class RedyGymLogDbReaderView extends VBox {
 				fileChooser.setTitle("Select Backup File");
 				final File file = fileChooser.showOpenDialog(stage);
 				if (file != null) {
-					model.getBackupFile().setValue(file.getAbsolutePath());
+					model.getFile().setValue(file.getAbsolutePath());
 				}
 			}
 		});
@@ -51,8 +51,8 @@ public class RedyGymLogDbReaderView extends VBox {
 
 	private void createDeleteBackupFileRow() {
 		final CheckBox deleteBackupFile = new CheckBox("Delete backup after generation");
-		deleteBackupFile.setSelected(model.getDeleteBackupFile().get());
-		model.getDeleteBackupFile().bind(deleteBackupFile.selectedProperty());
+		deleteBackupFile.setSelected(model.getDeleteFile().get());
+		model.getDeleteFile().bind(deleteBackupFile.selectedProperty());
 		setMargin(deleteBackupFile, new Insets(0, 10, 10, 10));
 		getChildren().add(deleteBackupFile);
 	}

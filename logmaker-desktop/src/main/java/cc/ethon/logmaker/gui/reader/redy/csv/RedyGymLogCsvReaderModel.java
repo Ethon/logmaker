@@ -1,37 +1,25 @@
 package cc.ethon.logmaker.gui.reader.redy.csv;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import cc.ethon.logmaker.Settings;
+import cc.ethon.logmaker.gui.reader.SingleFileReaderModel;
 
-public class RedyGymLogCsvReaderModel {
+public class RedyGymLogCsvReaderModel extends SingleFileReaderModel {
 
 	private static final String KEY_EXPORTFILE = RedyGymLogCsvReaderModel.class.getSimpleName() + ".exportFile";
 	private static final String KEY_DELETEEXPORTFILE = RedyGymLogCsvReaderModel.class.getSimpleName() + ".deleteExportFile";
 
-	private final SimpleStringProperty exportFile;
-	private final BooleanProperty deleteExportFile;
+	@Override
+	protected String getFileKey() {
+		return KEY_EXPORTFILE;
+	}
+
+	@Override
+	protected String getDeleteFileKey() {
+		return KEY_DELETEEXPORTFILE;
+	}
 
 	public RedyGymLogCsvReaderModel(Settings settings) {
-		exportFile = new SimpleStringProperty();
-		if (settings.getString(KEY_EXPORTFILE) != null) {
-			exportFile.set(settings.getString(KEY_EXPORTFILE));
-		}
-		exportFile.addListener((obs, o, n) -> settings.setString(KEY_EXPORTFILE, n));
-
-		deleteExportFile = new SimpleBooleanProperty();
-		deleteExportFile.set(settings.getBoolean(KEY_DELETEEXPORTFILE));
-		deleteExportFile.addListener((obs, o, n) -> settings.setBoolean(KEY_DELETEEXPORTFILE, n));
-	}
-
-	public StringProperty getExportFile() {
-		return exportFile;
-	}
-
-	public BooleanProperty getDeleteExportFile() {
-		return deleteExportFile;
+		super(settings);
 	}
 
 }

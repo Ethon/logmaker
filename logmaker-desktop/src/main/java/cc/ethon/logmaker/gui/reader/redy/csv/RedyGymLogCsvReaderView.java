@@ -25,7 +25,7 @@ public class RedyGymLogCsvReaderView extends VBox {
 		HBox.setMargin(label, new Insets(0, 10, 10, 0));
 
 		final TextField textField = new TextField();
-		textField.textProperty().bind(model.getExportFile());
+		textField.textProperty().bind(model.getFile());
 		HBox.setHgrow(textField, Priority.ALWAYS);
 		HBox.setMargin(textField, new Insets(0, 10, 10, 0));
 
@@ -37,7 +37,7 @@ public class RedyGymLogCsvReaderView extends VBox {
 				fileChooser.setTitle("Select Export File");
 				final File file = fileChooser.showOpenDialog(stage);
 				if (file != null) {
-					model.getExportFile().setValue(file.getAbsolutePath());
+					model.getFile().setValue(file.getAbsolutePath());
 				}
 			}
 		});
@@ -51,8 +51,8 @@ public class RedyGymLogCsvReaderView extends VBox {
 
 	private void createDeleteExportFileRow() {
 		final CheckBox deleteExportFile = new CheckBox("Delete export after generation");
-		deleteExportFile.setSelected(model.getDeleteExportFile().get());
-		model.getDeleteExportFile().bind(deleteExportFile.selectedProperty());
+		deleteExportFile.setSelected(model.getDeleteFile().get());
+		model.getDeleteFile().bind(deleteExportFile.selectedProperty());
 		setMargin(deleteExportFile, new Insets(0, 10, 10, 10));
 		getChildren().add(deleteExportFile);
 	}
