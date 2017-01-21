@@ -36,6 +36,10 @@ public class SetModel {
 		return set.getReps();
 	}
 
+	public int getTimeDoneSeconds() {
+		return set.getTimeDone();
+	}
+
 	public Date getTimeDone() {
 		int seconds = set.getTimeDone();
 		final int hours = seconds / 3600;

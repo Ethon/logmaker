@@ -1,0 +1,13 @@
+<WorkoutLog>
+<#list workouts as workout>
+	<Workout name="${workout.name!""}" date="${workout.date?date?iso_utc}">
+	<#list workout.exercises as exercise>
+		<Exercise name="${exercise.name}">
+		<#list exercise.sets as set>
+			<Set time="${set.time?time?iso_utc}" weight="${set.weight.grams?c}" reps="${set.repetitions?c}" timeDone="${set.timeDoneSeconds?c}" distance="${set.distance.meters?c}" />
+		</#list>
+		</Exercise>
+	</#list>
+	</Workout>
+</#list>
+</WorkoutLog>
