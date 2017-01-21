@@ -19,6 +19,7 @@ import cc.ethon.logmaker.formula.WendlerFormula;
 import cc.ethon.logmaker.gui.gen.GeneratorController;
 import cc.ethon.logmaker.gui.gen.template.TemplateGeneratorController;
 import cc.ethon.logmaker.gui.reader.LogReaderController;
+import cc.ethon.logmaker.gui.reader.logmaker.LogmakerXmlReaderController;
 import cc.ethon.logmaker.gui.reader.redy.csv.RedyGymLogCsvReaderController;
 import cc.ethon.logmaker.gui.reader.redy.db.RedyGymLogDbReaderController;
 import cc.ethon.logmaker.gui.sink.SinkController;
@@ -68,7 +69,8 @@ public class MainWindowModel {
 		// Changing the order will cause setting to be invalid!
 		logReaders = FXCollections.observableArrayList( //
 				new RedyGymLogCsvReaderController(settings), //
-				new RedyGymLogDbReaderController(settings));
+				new RedyGymLogDbReaderController(settings), //
+				new LogmakerXmlReaderController(settings));
 
 		// Changing the order will cause setting to be invalid!
 		generators = FXCollections.observableArrayList( //
