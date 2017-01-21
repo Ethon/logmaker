@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <WorkoutLog>
 <#list workouts as workout>
 	<Workout name="${workout.name!""}" date="${workout.date?date?iso_utc}">
