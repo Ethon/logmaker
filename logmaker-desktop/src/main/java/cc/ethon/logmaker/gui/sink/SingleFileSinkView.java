@@ -1,4 +1,4 @@
-package cc.ethon.logmaker.gui.reader;
+package cc.ethon.logmaker.gui.sink;
 
 import java.io.File;
 import java.util.Map;
@@ -7,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -16,15 +15,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public abstract class SingleFileReaderView extends VBox {
+public abstract class SingleFileSinkView extends VBox {
 
 	protected static final int CHOSEN_FILE = 1;
 	protected static final int CHOOSE_FILE = 2;
 	protected static final int SELECT_FILE = 3;
-	protected static final int DELETE_FILE = 4;
 
 	private final Stage stage;
-	private final SingleFileReaderModel model;
+	private final SingleFileSinkModel model;
 	private final Map<Integer, String> strings;
 
 	protected abstract Map<Integer, String> createStrings();
@@ -50,7 +48,6 @@ public abstract class SingleFileReaderView extends VBox {
 				}
 			}
 		});
-		HBox.setMargin(button, new Insets(0, 0, 10, 0));
 
 		final HBox hbox = new HBox();
 		hbox.getChildren().addAll(label, textField, button);
@@ -58,21 +55,12 @@ public abstract class SingleFileReaderView extends VBox {
 		getChildren().add(hbox);
 	}
 
-	private void createDeleteFileRow() {
-		final CheckBox deleteFile = new CheckBox(strings.get(DELETE_FILE));
-		deleteFile.setSelected(model.getDeleteFile().get());
-		model.getDeleteFile().bind(deleteFile.selectedProperty());
-		setMargin(deleteFile, new Insets(0, 10, 10, 10));
-		getChildren().add(deleteFile);
-	}
-
-	public SingleFileReaderView(Stage stage, SingleFileReaderModel model) {
+	public SingleFileSinkView(Stage stage, SingleFileSinkModel model) {
 		this.stage = stage;
 		this.model = model;
 		this.strings = createStrings();
 
 		createFilePickerRow();
-		createDeleteFileRow();
 	}
 
 }

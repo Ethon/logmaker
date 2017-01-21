@@ -23,6 +23,7 @@ import cc.ethon.logmaker.gui.reader.redy.csv.RedyGymLogCsvReaderController;
 import cc.ethon.logmaker.gui.reader.redy.db.RedyGymLogDbReaderController;
 import cc.ethon.logmaker.gui.sink.SinkController;
 import cc.ethon.logmaker.gui.sink.clipboard.ClipboardSinkController;
+import cc.ethon.logmaker.gui.sink.fileappender.FileAppenderSinkController;
 
 public class MainWindowModel {
 
@@ -66,16 +67,17 @@ public class MainWindowModel {
 
 		// Changing the order will cause setting to be invalid!
 		logReaders = FXCollections.observableArrayList( //
-				new RedyGymLogCsvReaderController(Settings.getInstance()), //
-				new RedyGymLogDbReaderController(Settings.getInstance()));
+				new RedyGymLogCsvReaderController(settings), //
+				new RedyGymLogDbReaderController(settings));
 
 		// Changing the order will cause setting to be invalid!
 		generators = FXCollections.observableArrayList( //
-				new TemplateGeneratorController(Settings.getInstance()));
+				new TemplateGeneratorController(settings));
 
 		// Changing the order will cause setting to be invalid!
 		sinks = FXCollections.observableArrayList( //
-				new ClipboardSinkController());
+				new ClipboardSinkController(), //
+				new FileAppenderSinkController(settings));
 
 		// Changing the order will cause setting to be invalid!
 		formulas = FXCollections.observableArrayList( //

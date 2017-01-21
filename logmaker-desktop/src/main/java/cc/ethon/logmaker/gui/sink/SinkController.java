@@ -8,7 +8,7 @@ public abstract class SinkController {
 
 	public abstract String getName();
 
-	public abstract Sink createSink();
+	public abstract Sink createSink() throws Exception;
 
 	public abstract Node getOptionsView(Stage stage);
 
