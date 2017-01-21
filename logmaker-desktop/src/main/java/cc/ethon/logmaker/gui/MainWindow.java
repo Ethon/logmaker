@@ -153,12 +153,12 @@ public class MainWindow extends VBox {
 					final GeneratorController generatorController = selectedGeneratorComboBox.getSelectionModel().getSelectedItem();
 					final Generator generator = generatorController.getGenerator();
 
-					final SinkController sinkController = selectedSinkComboBox.getSelectionModel().getSelectedItem();
-					final Sink sink = sinkController.createSink();
-
 					final MaxEstimator formula = selectedFormulaComboBox.getSelectionModel().getSelectedItem();
 
-					generator.generate(sink, log, formula, model.getWorkoutsToGenerate().get());
+					final SinkController sinkController = selectedSinkComboBox.getSelectionModel().getSelectedItem();
+					try (final Sink sink = sinkController.createSink()) {
+						generator.generate(sink, log, formula, model.getWorkoutsToGenerate().get());
+					}
 
 					readerController.postProcess();
 					if (model.getCloseApplication().get()) {

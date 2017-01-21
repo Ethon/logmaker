@@ -2,10 +2,10 @@ package cc.ethon.logmaker.sink;
 
 import java.io.OutputStream;
 
-public interface Sink {
+public interface Sink extends AutoCloseable {
 
 	public OutputStream getOutputStream();
 
-	public void applyContent();
+	public void applyContent() throws Exception;
 
 }

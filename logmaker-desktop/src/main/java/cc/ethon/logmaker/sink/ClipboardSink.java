@@ -26,4 +26,8 @@ public class ClipboardSink implements Sink {
 		c.setContents(data, data);
 	}
 
+	@Override
+	public void close() {
+	}
+
 }
