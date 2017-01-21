@@ -39,24 +39,28 @@ public class WorkoutExerciseModel {
 		return workout.isErmRecord(set, exercise.getSets());
 	}
 
+	public ExerciseType getType() {
+		return exercise.getExercise().getType();
+	}
+
 	public boolean isTimeOnly() {
-		return exercise.getExercise().getType() == ExerciseType.Time;
+		return getType() == ExerciseType.Time;
 	}
 
 	public boolean isRepsOnly() {
-		return exercise.getExercise().getType() == ExerciseType.Reps;
+		return getType() == ExerciseType.Reps;
 	}
 
 	public boolean isWeightForReps() {
-		return exercise.getExercise().getType() == ExerciseType.WeightReps;
+		return getType() == ExerciseType.WeightReps;
 	}
 
 	public boolean isWeightForTime() {
-		return exercise.getExercise().getType() == ExerciseType.WeightTime;
+		return getType() == ExerciseType.WeightTime;
 	}
 
 	public boolean isDistanceForTime() {
-		return exercise.getExercise().getType() == ExerciseType.DistanceTime;
+		return getType() == ExerciseType.DistanceTime;
 	}
 
 	public WeightModel getTotalWeight() {
