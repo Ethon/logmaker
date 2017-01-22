@@ -25,6 +25,7 @@ import cc.ethon.logmaker.gui.reader.redy.db.RedyGymLogDbReaderController;
 import cc.ethon.logmaker.gui.sink.SinkController;
 import cc.ethon.logmaker.gui.sink.clipboard.ClipboardSinkController;
 import cc.ethon.logmaker.gui.sink.fileappender.FileAppenderSinkController;
+import cc.ethon.logmaker.gui.sink.filewriter.FileWriterSinkController;
 
 public class MainWindowModel {
 
@@ -79,7 +80,8 @@ public class MainWindowModel {
 		// Changing the order will cause setting to be invalid!
 		sinks = FXCollections.observableArrayList( //
 				new ClipboardSinkController(), //
-				new FileAppenderSinkController(settings));
+				new FileAppenderSinkController(settings), //
+				new FileWriterSinkController(settings));
 
 		// Changing the order will cause setting to be invalid!
 		formulas = FXCollections.observableArrayList( //

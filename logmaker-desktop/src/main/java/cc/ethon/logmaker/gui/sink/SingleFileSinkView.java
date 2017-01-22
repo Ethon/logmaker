@@ -42,7 +42,7 @@ public abstract class SingleFileSinkView extends VBox {
 			public void handle(ActionEvent event) {
 				final FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle(strings.get(SELECT_FILE));
-				final File file = fileChooser.showOpenDialog(stage);
+				final File file = fileChooser.showSaveDialog(stage);
 				if (file != null) {
 					model.getFile().setValue(file.getAbsolutePath());
 				}
