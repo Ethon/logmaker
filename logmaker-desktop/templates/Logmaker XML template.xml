@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <WorkoutLog>
 <#list workouts as workout>
-	<Workout name="${workout.name!""}" date="${workout.date?date?iso_utc}">
+	<Workout name="${workout.name!""}" date="${workout.date?string["yyyy-MM-dd"]}">
 	<#list workout.exercises as exercise>
 		<Exercise name="${exercise.name}" type="${exercise.type}">
 		<#list exercise.sets as set>
