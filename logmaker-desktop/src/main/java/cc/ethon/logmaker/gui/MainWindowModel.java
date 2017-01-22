@@ -26,6 +26,7 @@ import cc.ethon.logmaker.gui.sink.SinkController;
 import cc.ethon.logmaker.gui.sink.clipboard.ClipboardSinkController;
 import cc.ethon.logmaker.gui.sink.fileappender.FileAppenderSinkController;
 import cc.ethon.logmaker.gui.sink.filewriter.FileWriterSinkController;
+import cc.ethon.logmaker.gui.sink.xmlappender.XmlAppenderSinkController;
 
 public class MainWindowModel {
 
@@ -81,7 +82,8 @@ public class MainWindowModel {
 		sinks = FXCollections.observableArrayList( //
 				new ClipboardSinkController(), //
 				new FileAppenderSinkController(settings), //
-				new FileWriterSinkController(settings));
+				new FileWriterSinkController(settings), //
+				new XmlAppenderSinkController(settings));
 
 		// Changing the order will cause setting to be invalid!
 		formulas = FXCollections.observableArrayList( //
