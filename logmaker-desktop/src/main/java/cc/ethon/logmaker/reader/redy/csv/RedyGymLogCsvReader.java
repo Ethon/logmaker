@@ -18,11 +18,11 @@ import java.util.Optional;
 import java.util.TreeMap;
 
 import cc.ethon.logmaker.Exercise;
-import cc.ethon.logmaker.Exercise.ExerciseType;
 import cc.ethon.logmaker.Set;
 import cc.ethon.logmaker.Workout;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.reader.LogReader;
+import cc.ethon.logmaker.reader.ReaderUtil;
 
 public class RedyGymLogCsvReader implements LogReader {
 
@@ -34,25 +34,6 @@ public class RedyGymLogCsvReader implements LogReader {
 			throw new IllegalArgumentException("Could not read separator from stream");
 		}
 		return line.split("=")[1].trim();
-	}
-
-	private static ExerciseType determineExerciseType(boolean hasReps, boolean hasWeight, boolean hasTimeDone, boolean hasDistance) {
-		if (hasReps) {
-			if (hasWeight) {
-				return ExerciseType.WeightReps;
-			} else {
-				return ExerciseType.Reps;
-			}
-		} else if (hasTimeDone) {
-			if (hasDistance) {
-				return ExerciseType.DistanceTime;
-			} else if (hasWeight) {
-				return ExerciseType.WeightTime;
-			} else {
-				return ExerciseType.Time;
-			}
-		}
-		throw new IllegalArgumentException("Unsupported exercise type");
 	}
 
 	public RedyGymLogCsvReader(File exportFile) {
@@ -99,7 +80,7 @@ public class RedyGymLogCsvReader implements LogReader {
 			final boolean hasDistance = !parts[5].isEmpty();
 			final int distance = hasDistance ? Integer.valueOf(parts[5]) : 0;
 
-			final Exercise exercise = new Exercise(parts[1], determineExerciseType(hasReps, hasWeight, hasTimeDone, hasDistance));
+			final Exercise exercise = new Exercise(parts[1], ReaderUtil.determineExerciseType(hasReps, hasWeight, hasTimeDone, hasDistance));
 
 			Workout wo = workouts.get(date);
 			if (wo == null) {
