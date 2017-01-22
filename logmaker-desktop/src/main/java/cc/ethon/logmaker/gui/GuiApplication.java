@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import cc.ethon.logmaker.Settings;
 
@@ -36,12 +37,17 @@ public class GuiApplication extends Application {
 		window.heightProperty().addListener(resizeListener);
 	}
 
+	private void setIcon(Stage primaryStage) {
+		primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/logmaker-icon-128.png")));
+	}
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
 			primaryStage.setTitle("logmaker");
+			setIcon(primaryStage);
 			final MainWindow mainWindow = new MainWindow(primaryStage, new MainWindowModel(Settings.getInstance()));
-			final Scene scene = new Scene(mainWindow, 600, 850);
+			final Scene scene = new Scene(mainWindow, 650, 800);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			installSizeChangeListener(primaryStage, mainWindow);
