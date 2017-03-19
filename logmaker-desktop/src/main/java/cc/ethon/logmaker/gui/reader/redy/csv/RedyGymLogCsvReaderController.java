@@ -11,6 +11,11 @@ import cc.ethon.logmaker.reader.redy.csv.RedyGymLogCsvReader;
 
 public class RedyGymLogCsvReaderController extends SingleFileReaderController<RedyGymLogCsvReaderModel> {
 
+	@Override
+	protected String getImageResourceName() {
+		return "/redy-icon-24.png";
+	}
+
 	public RedyGymLogCsvReaderController(Settings settings) {
 		super(new RedyGymLogCsvReaderModel(settings));
 	}

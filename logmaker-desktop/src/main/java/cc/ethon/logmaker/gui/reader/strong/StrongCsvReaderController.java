@@ -11,6 +11,11 @@ import cc.ethon.logmaker.reader.strong.StrongCsvReader;
 
 public class StrongCsvReaderController extends SingleFileReaderController<StrongCsvReaderModel> {
 
+	@Override
+	protected String getImageResourceName() {
+		return "/strong-icon-24.png";
+	}
+
 	public StrongCsvReaderController(Settings settings) {
 		super(new StrongCsvReaderModel(settings));
 	}

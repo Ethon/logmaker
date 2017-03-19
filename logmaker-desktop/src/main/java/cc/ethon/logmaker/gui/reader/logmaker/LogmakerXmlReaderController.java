@@ -11,6 +11,11 @@ import cc.ethon.logmaker.reader.logmaker.LogmakerXmlReader;
 
 public class LogmakerXmlReaderController extends SingleFileReaderController<LogmakerXmlReaderModel> {
 
+	@Override
+	protected String getImageResourceName() {
+		return "/logmaker-icon-24.png";
+	}
+
 	public LogmakerXmlReaderController(Settings settings) {
 		super(new LogmakerXmlReaderModel(settings));
 	}

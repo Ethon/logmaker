@@ -1,1 +1,1 @@
-java -jar logmaker-desktop-1.0.0-jfx.jar
+java -jar logmaker-desktop-1.0.2.jar

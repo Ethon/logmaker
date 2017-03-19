@@ -13,9 +13,12 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -25,6 +28,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import cc.ethon.logmaker.WorkoutLog;
 import cc.ethon.logmaker.formula.MaxEstimator;
 import cc.ethon.logmaker.gen.Generator;
@@ -34,6 +38,25 @@ import cc.ethon.logmaker.gui.sink.SinkController;
 import cc.ethon.logmaker.sink.Sink;
 
 public class MainWindow extends VBox {
+
+	private static class SelectedLogReaderCellFactory implements Callback<ListView<LogReaderController>, ListCell<LogReaderController>> {
+		@Override
+		public ListCell<LogReaderController> call(ListView<LogReaderController> view) {
+			return new ListCell<LogReaderController>() {
+				@Override
+				protected void updateItem(LogReaderController controller, boolean arg1) {
+					super.updateItem(controller, arg1);
+					if (controller != null) {
+						if (controller.getImage() != null) {
+							setGraphic(new ImageView(controller.getImage()));
+						}
+						setText(controller.getName());
+						setDisable(false);
+					}
+				}
+			};
+		}
+	}
 
 	private final Stage stage;
 	private final MainWindowModel model;
@@ -51,6 +74,10 @@ public class MainWindow extends VBox {
 		selectedLogReaderComboBox.setItems(model.getLogReaders());
 		selectedLogReaderComboBox.getSelectionModel().select(model.getSelectedLogReader().get());
 		model.getSelectedLogReader().bind(selectedLogReaderComboBox.getSelectionModel().selectedIndexProperty());
+
+		final SelectedLogReaderCellFactory cellFactory = new SelectedLogReaderCellFactory();
+		selectedLogReaderComboBox.setButtonCell(cellFactory.call(null));
+		selectedLogReaderComboBox.setCellFactory(cellFactory);
 
 		final LogReaderController logReader = model.getLogReaders().get(model.getSelectedLogReader().get());
 		final TitledPane optionsPane = new TitledPane("Reader Options", logReader.getOptionsView(stage));

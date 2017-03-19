@@ -11,6 +11,11 @@ import cc.ethon.logmaker.reader.redy.db.RedyGymLogDbReader;
 
 public class RedyGymLogDbReaderController extends SingleFileReaderController<RedyGymLogDbReaderModel> {
 
+	@Override
+	protected String getImageResourceName() {
+		return "/redy-icon-24.png";
+	}
+
 	public RedyGymLogDbReaderController(Settings settings) {
 		super(new RedyGymLogDbReaderModel(settings));
 	}
